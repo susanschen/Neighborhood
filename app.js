@@ -1,3 +1,23 @@
+/**
+ * The Menu Section
+ */
+var openbtn = document.getElementsByClassName('openbtn');
+openbtn[0].addEventListener('click', openNav);
+var closebtn = document.getElementsByClassName('closebtn');
+closebtn[0].addEventListener('click', closeNav);
+
+function openNav() {
+  document.getElementById('panel').className = "sidenav show";
+}
+
+function closeNav() {
+  document.getElementById('panel').className = "sidenav hide";
+}
+
+/**
+ * The Map Section
+ */
+
 var map;
 
 // Create a new blank array for all the listing markers.
