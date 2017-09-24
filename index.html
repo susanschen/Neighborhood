@@ -18,8 +18,8 @@ Susan Chen">
         <div>
           <input id="show-listings" type="button" value="Show Listings">
           <input id="hide-listings" type="button" value="Hide Listings">
-          <ul>
-            <li>Place 1</li>
+          <ul id="place-list" data-bind = "foreach: locations" >
+            <li data-bind = "text: title"></li>
           </ul>
         </div>
       </div>

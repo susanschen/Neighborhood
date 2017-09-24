@@ -34,7 +34,7 @@ function closeNav() {
 //  }
 //];
 
-var initialLocations = [
+var attractionsData = [
     {title: 'Central Park', location: {lat: 40.767852, lng: -73.979694}},
     {title: 'Metropolitan Museum of Art', location: {lat: 40.779437, lng: -73.963244}},
     {title: 'Prospect Park Zoo', location: {lat: 40.665375, lng: -73.965414}},
@@ -43,32 +43,31 @@ var initialLocations = [
     {title: 'Empire State Building', location: {lat: 40.748541, lng: -73.985758}}
   ];
 
+// Class Attraction to hold the observables
+var Attraction = function(data) {
+  this.title = ko.observable(data.title);
+  this.location = ko.observable(data.location);
+};
 
 //// Class Cat
 //var Cat = function(data) {
-//  // var self = this;
 //  this.clickCount = ko.observable(data.clickCount);
 //  this.name = ko.observable(data.name);
 //  this.imgSrc = ko.observable(data.imgSrc);
 //  this.imgAttribution = ko.observable(data.imgAttribution);
 //  this.nicknames = ko.observableArray(data.nicknames);
 //  this.title = ko.computed(function() {
-//    // var self = this;
 //    var title;
 //    var clicks = this.clickCount();
-//    if(clicks < 5) {
-//      title = 'child';
-//    } else if (clicks < 10) {
-//      title = 'teen';
-//    } else if (clicks < 15 ) {
-//      title = 'adult';
-//    } else {
-//      title = 'ninja';
+//    if(clicks < 5) { title = 'child';
+//    } else if (clicks < 10) { title = 'teen';
+//    } else if (clicks < 15 ) { title = 'adult';
+//    } else { title = 'ninja';
 //    }
 //    return title;
 //  }, this);
 //};
-//
+
 //// Class ViewModel
 //var ViewModel = function(){
 //  // self gets assigned to the current scope of this,
@@ -97,8 +96,25 @@ var initialLocations = [
 //  };
 //};
 
-// make it go!
-// ko.applyBindings(new ViewModel());
+var ViewModel = function() {
+  var self = this;
+
+  // Get the list of attractions
+  this.locations = ko.observableArray([]);
+  attractionsData.forEach(function(attraction) {
+    self.locations.push(new Attraction(attraction));
+  });
+
+  this.currentAttraction = ko.observable(this.locations()[0]);
+  // this.currentAttraction = ko.observable();
+
+  this.setAttraction = function(clicked) {
+    self.currentAttraction(clicked);
+  };
+};
+
+// Start the Knockout bindings
+ko.applyBindings(new ViewModel());
 
 /**
  * The Map Section
@@ -242,10 +258,10 @@ function initMap() {
   var largeInfowindow = new google.maps.InfoWindow();
 
   // Create the markers
-  for (var i = 0; i < initialLocations.length; i++) {
+  for (var i = 0; i < attractionsData.length; i++) {
     // Get the position from the location array.
-    var position = initialLocations[i].location;
-    var title = initialLocations[i].title;
+    var position = attractionsData[i].location;
+    var title = attractionsData[i].title;
     // Create a marker per location, and put into markers array.
     var marker = new google.maps.Marker({
       position: position,
