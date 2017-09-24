@@ -198,8 +198,8 @@ function initMap() {
   });
 
   createMarkers();
-  showListings();
-//  document.getElementById('show-listings').addEventListener('click', showListings);
+  showMarkers();
+//  document.getElementById('show-listings').addEventListener('click', showMarkers);
 //  document.getElementById('hide-listings').addEventListener('click', hideListings);
 } // ends initMap
 
@@ -259,8 +259,8 @@ function createMarkers() {
   }//ends for loop
 }
 
-// This function will loop through the markers array and display them all.
-function showListings() {
+// Show all markers
+function showMarkers() {
   var bounds = new google.maps.LatLngBounds();
   // Extend the boundaries of the map for each marker and display the marker
   for (var i = 0; i < markers.length; i++) {
