@@ -110,6 +110,7 @@ var ViewModel = function() {
 
   this.setAttraction = function(clicked) {
     self.currentAttraction(clicked);
+    console.log(self.currentAttraction());
   };
 };
 
@@ -276,14 +277,17 @@ function initMap() {
     marker.addListener('click', function() {
       populateInfoWindow(this, largeInfowindow);
     });
+
+    // somehow this mouseover & mouseout is causing a bug with the knockout bind
+    // for curentAttraction :(
     // Two event listeners - one for mouseover, one for mouseout,
     // to change the colors back and forth.
-    marker.addListener('mouseover', function() {
-      this.setIcon(highlightedIcon);
-    });
-    marker.addListener('mouseout', function() {
-      this.setIcon(defaultIcon);
-    });
+//    marker.addListener('mouseover', function() {
+//      this.setIcon(highlightedIcon);
+//    });
+//    marker.addListener('mouseout', function() {
+//      this.setIcon(defaultIcon);
+//    });
   }
 
   showListings();

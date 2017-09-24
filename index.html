@@ -19,8 +19,11 @@ Susan Chen">
           <input id="show-listings" type="button" value="Show Listings">
           <input id="hide-listings" type="button" value="Hide Listings">
           <ul id="place-list" data-bind = "foreach: locations" >
-            <li data-bind = "text: title"></li>
+            <li data-bind = "text: title, click: $parent.setAttraction"></li>
           </ul>
+        </div>
+        <div data-bind="with: currentAttraction">
+          <h2 data-bind="text: title"></h2>
         </div>
       </div>
       <div class="openbtn">Menu</div>
