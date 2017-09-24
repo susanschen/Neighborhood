@@ -33,7 +33,17 @@ function closeNav() {
 //  nicknames: ['Bami']
 //  }
 //];
-//
+
+var initialLocations = [
+    {title: 'Central Park', location: {lat: 40.767852, lng: -73.979694}},
+    {title: 'Metropolitan Museum of Art', location: {lat: 40.779437, lng: -73.963244}},
+    {title: 'Prospect Park Zoo', location: {lat: 40.665375, lng: -73.965414}},
+    {title: 'Times Square', location: {lat: 40.758895, lng: -73.985131}},
+    {title: 'United Nations', location: {lat: 40.748876, lng: -73.968009}},
+    {title: 'Empire State Building', location: {lat: 40.748541, lng: -73.985758}}
+  ];
+
+
 //// Class Cat
 //var Cat = function(data) {
 //  // var self = this;
@@ -88,7 +98,7 @@ function closeNav() {
 //};
 
 // make it go!
-ko.applyBindings(new ViewModel());
+// ko.applyBindings(new ViewModel());
 
 /**
  * The Map Section
@@ -216,14 +226,14 @@ function initMap() {
     mapTypeControl: false
   });
 
-  var locations = [
-    {title: 'Central Park', location: {lat: 40.767852, lng: -73.979694}},
-    {title: 'Metropolitan Museum of Art', location: {lat: 40.779437, lng: -73.963244}},
-    {title: 'Prospect Park Zoo', location: {lat: 40.665375, lng: -73.965414}},
-    {title: 'Times Square', location: {lat: 40.758895, lng: -73.985131}},
-    {title: 'United Nations', location: {lat: 40.748876, lng: -73.968009}},
-    {title: 'Empire State Building', location: {lat: 40.748541, lng: -73.985758}}
-  ];
+//  var locations = [
+//    {title: 'Central Park', location: {lat: 40.767852, lng: -73.979694}},
+//    {title: 'Metropolitan Museum of Art', location: {lat: 40.779437, lng: -73.963244}},
+//    {title: 'Prospect Park Zoo', location: {lat: 40.665375, lng: -73.965414}},
+//    {title: 'Times Square', location: {lat: 40.758895, lng: -73.985131}},
+//    {title: 'United Nations', location: {lat: 40.748876, lng: -73.968009}},
+//    {title: 'Empire State Building', location: {lat: 40.748541, lng: -73.985758}}
+//  ];
 
   // Style the markers
   var defaultIcon = makeMarkerIcon('f2c6a2');
@@ -232,10 +242,10 @@ function initMap() {
   var largeInfowindow = new google.maps.InfoWindow();
 
   // Create the markers
-  for (var i = 0; i < locations.length; i++) {
+  for (var i = 0; i < initialLocations.length; i++) {
     // Get the position from the location array.
-    var position = locations[i].location;
-    var title = locations[i].title;
+    var position = initialLocations[i].location;
+    var title = initialLocations[i].title;
     // Create a marker per location, and put into markers array.
     var marker = new google.maps.Marker({
       position: position,
