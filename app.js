@@ -341,3 +341,8 @@ function makeMarkerIcon(markerColor) {
     new google.maps.Size(21,34));
   return markerImage;
 }
+
+// Google Maps API error handler
+function mapError() {
+  alert("Google Maps failed to load. Please try again later.");
+}

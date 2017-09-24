@@ -2,45 +2,46 @@
 <html>
   <head>
   <title>Susan's Map Project</title>
-  <meta charset="UTF-8">
-  <meta name="description" content="A map of my neighborhood">
-  <meta name="keywords" content="Google Map">
-  <meta name="author" content="
+  <meta charset = "UTF-8">
+  <meta name = "description" content = "A map of my neighborhood">
+  <meta name = "keywords" content = "Google Map">
+  <meta name = "author" content = "
 Susan Chen">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="main.css">
+  <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+  <link rel = "stylesheet" href = "main.css">
   </head>
   <body>
-    <div class="container">
-      <div id="panel" class="sidenav">
-        <div class="closebtn">X</div>
+    <div class = "container">
+      <div id = "panel" class = "sidenav">
+        <div class = "closebtn">X</div>
         <h1>Popular Attractions</h1>
         <div>
 <!--
           <input id="show-listings" type="button" value="Show Listings">
           <input id="hide-listings" type="button" value="Hide Listings">
 -->
-          <ul id="place-list" data-bind = "foreach: locations" >
+          <ul id = "place-list" data-bind = "foreach: locations" >
             <li data-bind = "text: title, click: $parent.setAttraction"></li>
           </ul>
         </div>
-        <div data-bind="with: currentAttraction">
-          <h2 data-bind="text: title"></h2>
+        <div data-bind = "with: currentAttraction">
+          <h2 data-bind = "text: title"></h2>
         </div>
       </div>
-      <div class="openbtn">Menu</div>
-      <div id="map"></div>
+      <div class = "openbtn">Menu</div>
+      <div id = "map"></div>
     </div>
 
     <script
-      src="https://code.jquery.com/jquery-2.2.4.min.js"
-      integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-      crossorigin="anonymous"></script>
-    <script src="knockout-3.2.0.js"></script>
-    <script src="app.js"></script>
+      src = "https://code.jquery.com/jquery-2.2.4.min.js"
+      integrity = "sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+      crossorigin = "anonymous"></script>
+    <script src = "knockout-3.2.0.js"></script>
+    <script src = "app.js"></script>
     <script async
-      src=
-      "https://maps.googleapis.com/maps/api/js?key=AIzaSyA5vq86h6-sQUBfJhZP-iLTHKhKoJ3H5G8&v=3&callback=initMap">
+      src =
+      "https://maps.googleapis.com/maps/api/js?key=AIzaSyA5vq86h6-sQUBfJhZP-iLTHKhKoJ3H5G8&v=3&callback=initMap"
+      onerror = "mapError()">
     </script>
   </body>
 </html>
