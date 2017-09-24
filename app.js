@@ -208,23 +208,21 @@ function initMap() {
   }
 ];
 
-  // Constructor creates a new map - only center and zoom are required.
+  // Constructor creates a new map
   map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 40.7413549, lng: -73.9980244},
-    zoom: 13,
+    center: {lat: 40.714728, lng: -73.998672},
+    zoom: 12,
     styles: styles,
     mapTypeControl: false
   });
 
-  // These are the real estate listings that will be shown to the user.
-  // Normally we'd have these in a database instead.
   var locations = [
-    {title: 'Park Ave Penthouse', location: {lat: 40.7713024, lng: -73.9632393}},
-    {title: 'Chelsea Loft', location: {lat: 40.7444883, lng: -73.9949465}},
-    {title: 'Union Square Open Floor Plan', location: {lat: 40.7347062, lng: -73.9895759}},
-    {title: 'East Village Hip Studio', location: {lat: 40.7281777, lng: -73.984377}},
-    {title: 'TriBeCa Artsy Bachelor Pad', location: {lat: 40.7195264, lng: -74.0089934}},
-    {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
+    {title: 'Central Park', location: {lat: 40.767852, lng: -73.979694}},
+    {title: 'Metropolitan Museum of Art', location: {lat: 40.779437, lng: -73.963244}},
+    {title: 'Prospect Park Zoo', location: {lat: 40.665375, lng: -73.965414}},
+    {title: 'Times Square', location: {lat: 40.758895, lng: -73.985131}},
+    {title: 'United Nations', location: {lat: 40.748876, lng: -73.968009}},
+    {title: 'Empire State Building', location: {lat: 40.748541, lng: -73.985758}}
   ];
 
   var largeInfowindow = new google.maps.InfoWindow();
