@@ -19,73 +19,73 @@ function closeNav() {
 /**
  * The ViewModel Section
  */
-var initialCats = [{
-  clickCount: 0,
-  name: 'Tabby',
-  imgSrc: 'img/434164568_fea0ad4013_z.jpg',
-  imgAttribution: 'https:www.flickr.com/photos/bigtallguy/434164568',
-  nicknames: ['Casper']
-  },{
-  clickCount: 0,
-  name: 'Babi',
-  imgSrc: 'img/22252709_010df3379e_z.jpg',
-  imgAttribution: 'https:www.flickr.com/photos/xshamx/4154543904',
-  nicknames: ['Bami']
-  }
-];
-
-// Class Cat
-var Cat = function(data) {
-  // var self = this;
-  this.clickCount = ko.observable(data.clickCount);
-  this.name = ko.observable(data.name);
-  this.imgSrc = ko.observable(data.imgSrc);
-  this.imgAttribution = ko.observable(data.imgAttribution);
-  this.nicknames = ko.observableArray(data.nicknames);
-  this.title = ko.computed(function() {
-    // var self = this;
-    var title;
-    var clicks = this.clickCount();
-    if(clicks < 5) {
-      title = 'child';
-    } else if (clicks < 10) {
-      title = 'teen';
-    } else if (clicks < 15 ) {
-      title = 'adult';
-    } else {
-      title = 'ninja';
-    }
-    return title;
-  }, this);
-};
-
-// Class ViewModel
-var ViewModel = function(){
-  // self gets assigned to the current scope of this,
-  // so when it's used inside an anonymouse function, it refers to that
-  var self = this;
-
-  // previously octopus getCats()
-  this.cats = ko.observableArray([]);
-  // see global variable array holding all cat objects
-  initialCats.forEach(function(cat) {
-    self.cats.push(new Cat(cat));   // use self, which use outer scope this
-  });
-
-  // initialize first currentCat
-  this.currentCat = ko.observable(this.cats()[0]);
-
-  // previously octopus setCurrentCat()
-  this.setCat = function(clickedCat) {
-    self.currentCat(clickedCat);
-  };
-
-  // previous octopus.incrementCounter()
-  this.incrementCounter = function() {
-    // clickCount is a property of Cat, not ViewModel
-    self.currentCat().clickCount(self.currentCat().clickCount() + 1);
-  };
-};
+//var initialCats = [{
+//  clickCount: 0,
+//  name: 'Tabby',
+//  imgSrc: 'img/434164568_fea0ad4013_z.jpg',
+//  imgAttribution: 'https:www.flickr.com/photos/bigtallguy/434164568',
+//  nicknames: ['Casper']
+//  },{
+//  clickCount: 0,
+//  name: 'Babi',
+//  imgSrc: 'img/22252709_010df3379e_z.jpg',
+//  imgAttribution: 'https:www.flickr.com/photos/xshamx/4154543904',
+//  nicknames: ['Bami']
+//  }
+//];
+//
+//// Class Cat
+//var Cat = function(data) {
+//  // var self = this;
+//  this.clickCount = ko.observable(data.clickCount);
+//  this.name = ko.observable(data.name);
+//  this.imgSrc = ko.observable(data.imgSrc);
+//  this.imgAttribution = ko.observable(data.imgAttribution);
+//  this.nicknames = ko.observableArray(data.nicknames);
+//  this.title = ko.computed(function() {
+//    // var self = this;
+//    var title;
+//    var clicks = this.clickCount();
+//    if(clicks < 5) {
+//      title = 'child';
+//    } else if (clicks < 10) {
+//      title = 'teen';
+//    } else if (clicks < 15 ) {
+//      title = 'adult';
+//    } else {
+//      title = 'ninja';
+//    }
+//    return title;
+//  }, this);
+//};
+//
+//// Class ViewModel
+//var ViewModel = function(){
+//  // self gets assigned to the current scope of this,
+//  // so when it's used inside an anonymouse function, it refers to that
+//  var self = this;
+//
+//  // previously octopus getCats()
+//  this.cats = ko.observableArray([]);
+//  // see global variable array holding all cat objects
+//  initialCats.forEach(function(cat) {
+//    self.cats.push(new Cat(cat));   // use self, which use outer scope this
+//  });
+//
+//  // initialize first currentCat
+//  this.currentCat = ko.observable(this.cats()[0]);
+//
+//  // previously octopus setCurrentCat()
+//  this.setCat = function(clickedCat) {
+//    self.currentCat(clickedCat);
+//  };
+//
+//  // previous octopus.incrementCounter()
+//  this.incrementCounter = function() {
+//    // clickCount is a property of Cat, not ViewModel
+//    self.currentCat().clickCount(self.currentCat().clickCount() + 1);
+//  };
+//};
 
 // make it go!
 ko.applyBindings(new ViewModel());
