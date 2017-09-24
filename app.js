@@ -35,18 +35,19 @@ function closeNav() {
 //];
 
 var attractionsData = [
-    {title: 'Central Park', location: {lat: 40.767852, lng: -73.979694}},
-    {title: 'Metropolitan Museum of Art', location: {lat: 40.779437, lng: -73.963244}},
-    {title: 'Prospect Park Zoo', location: {lat: 40.665375, lng: -73.965414}},
-    {title: 'Times Square', location: {lat: 40.758895, lng: -73.985131}},
-    {title: 'United Nations', location: {lat: 40.748876, lng: -73.968009}},
-    {title: 'Empire State Building', location: {lat: 40.748541, lng: -73.985758}}
+    {title: 'Central Park', location: {lat: 40.767852, lng: -73.979694}, category: 'Parks'},
+    {title: 'Metropolitan Museum of Art', location: {lat: 40.779437, lng: -73.963244}, category: 'Buildings'},
+    {title: 'Prospect Park Zoo', location: {lat: 40.665375, lng: -73.965414}, category: 'Parks'},
+    {title: 'Times Square', location: {lat: 40.758895, lng: -73.985131}, category: 'Buildings'},
+    {title: 'United Nations', location: {lat: 40.748876, lng: -73.968009}, category: 'Buildings'},
+    {title: 'Empire State Building', location: {lat: 40.748541, lng: -73.985758}, category: 'Buildings'}
   ];
 
 // Class Attraction to hold the observables
 var Attraction = function(data) {
   this.title = ko.observable(data.title);
   this.location = ko.observable(data.location); // does this need to be observed?
+  this.category = ko.observable(data.category);
 };
 
 //// Class Cat
