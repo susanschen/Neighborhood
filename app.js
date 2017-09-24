@@ -225,17 +225,13 @@ function initMap() {
     {title: 'Empire State Building', location: {lat: 40.748541, lng: -73.985758}}
   ];
 
-  var largeInfowindow = new google.maps.InfoWindow();
-
-  // Style the markers a bit. This will be our listing marker icon.
-  var defaultIcon = makeMarkerIcon('0091ff');
-
-  // Create a "highlighted location" marker color for when the user
-  // mouses over the marker.
-  var highlightedIcon = makeMarkerIcon('FFFF24');
+  // Style the markers
+  var defaultIcon = makeMarkerIcon('f2c6a2');
+  var highlightedIcon = makeMarkerIcon('a2adf2');
 
   var largeInfowindow = new google.maps.InfoWindow();
-  // The following group uses the location array to create an array of markers on initialize.
+
+  // Create the markers
   for (var i = 0; i < locations.length; i++) {
     // Get the position from the location array.
     var position = locations[i].location;
@@ -264,6 +260,7 @@ function initMap() {
     });
   }
 
+  showListings();
   document.getElementById('show-listings').addEventListener('click', showListings);
   document.getElementById('hide-listings').addEventListener('click', hideListings);
 }
