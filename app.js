@@ -46,7 +46,7 @@ var attractionsData = [
 // Class Attraction to hold the observables
 var Attraction = function(data) {
   this.title = ko.observable(data.title);
-  this.location = ko.observable(data.location);
+  this.location = ko.observable(data.location); // does this need to be observed?
 };
 
 //// Class Cat
@@ -105,12 +105,12 @@ var ViewModel = function() {
     self.locations.push(new Attraction(attraction));
   });
 
-  this.currentAttraction = ko.observable(this.locations()[0]);
-  // this.currentAttraction = ko.observable();
+  // this.currentAttraction = ko.observable(this.locations()[0]);
+  this.currentAttraction = ko.observable();
 
   this.setAttraction = function(clicked) {
     self.currentAttraction(clicked);
-    console.log(self.currentAttraction());
+    //console.log(self.currentAttraction());
   };
 };
 
@@ -122,8 +122,6 @@ ko.applyBindings(new ViewModel());
  */
 
 var map;
-
-// Create a new blank array for all the listing markers.
 var markers = [];
 
 function initMap() {
