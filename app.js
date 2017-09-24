@@ -289,8 +289,8 @@ function initMap() {
   }
 
   showListings();
-  document.getElementById('show-listings').addEventListener('click', showListings);
-  document.getElementById('hide-listings').addEventListener('click', hideListings);
+//  document.getElementById('show-listings').addEventListener('click', showListings);
+//  document.getElementById('hide-listings').addEventListener('click', hideListings);
 }
 
 // This function populates the infowindow when the marker is clicked. We'll only allow
@@ -321,11 +321,11 @@ function showListings() {
 }
 
 // This function will loop through the listings and hide them all.
-function hideListings() {
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(null);
-  }
-}
+//function hideListings() {
+//  for (var i = 0; i < markers.length; i++) {
+//    markers[i].setMap(null);
+//  }
+//}
 
 // This function takes in a COLOR, and then creates a new marker
 // icon of that color. The icon will be 21 px wide by 34 high, have an origin
