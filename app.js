@@ -197,15 +197,29 @@ function initMap() {
     mapTypeControl: false
   });
 
-//  var locations = [
-//    {title: 'Central Park', location: {lat: 40.767852, lng: -73.979694}},
-//    {title: 'Metropolitan Museum of Art', location: {lat: 40.779437, lng: -73.963244}},
-//    {title: 'Prospect Park Zoo', location: {lat: 40.665375, lng: -73.965414}},
-//    {title: 'Times Square', location: {lat: 40.758895, lng: -73.985131}},
-//    {title: 'United Nations', location: {lat: 40.748876, lng: -73.968009}},
-//    {title: 'Empire State Building', location: {lat: 40.748541, lng: -73.985758}}
-//  ];
+  createMarkers();
+  showListings();
+//  document.getElementById('show-listings').addEventListener('click', showListings);
+//  document.getElementById('hide-listings').addEventListener('click', hideListings);
+} // ends initMap
 
+// This function populates the infowindow when the marker is clicked. We'll only allow
+// one infowindow which will open at the marker that is clicked, and populate based
+// on that markers position.
+function populateInfoWindow(marker, infowindow) {
+  // Check to make sure the infowindow is not already opened on this marker.
+  if (infowindow.marker != marker) {
+    infowindow.marker = marker;
+    infowindow.setContent('<div>' + marker.title + '</div>');
+    infowindow.open(map, marker);
+    // Make sure the marker property is cleared if the infowindow is closed.
+    infowindow.addListener('closeclick', function() {
+      infowindow.marker = null;
+    });
+  }
+}
+
+function createMarkers() {
   // Style the markers
   var defaultIcon = makeMarkerIcon('f2c6a2');
   var highlightedIcon = makeMarkerIcon('a2adf2');
@@ -242,27 +256,7 @@ function initMap() {
 //    marker.addListener('mouseout', function() {
 //      this.setIcon(defaultIcon);
 //    });
-  }
-
-  showListings();
-//  document.getElementById('show-listings').addEventListener('click', showListings);
-//  document.getElementById('hide-listings').addEventListener('click', hideListings);
-}
-
-// This function populates the infowindow when the marker is clicked. We'll only allow
-// one infowindow which will open at the marker that is clicked, and populate based
-// on that markers position.
-function populateInfoWindow(marker, infowindow) {
-  // Check to make sure the infowindow is not already opened on this marker.
-  if (infowindow.marker != marker) {
-    infowindow.marker = marker;
-    infowindow.setContent('<div>' + marker.title + '</div>');
-    infowindow.open(map, marker);
-    // Make sure the marker property is cleared if the infowindow is closed.
-    infowindow.addListener('closeclick', function() {
-      infowindow.marker = null;
-    });
-  }
+  }//ends for loop
 }
 
 // This function will loop through the markers array and display them all.
