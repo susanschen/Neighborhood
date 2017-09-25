@@ -35,6 +35,16 @@ h1 {
   bottom: 0;
 }
 
+.infoWindow {
+  width: 300px;
+  height: 300px;
+  overflow: auto;
+}
+
+.infoHeader {
+  text-align: center;
+}
+
 .sidenav {
   height: 100%;
   width: 0;

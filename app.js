@@ -210,7 +210,10 @@ function populateInfoWindow(marker, infowindow) {
   // Check to make sure the infowindow is not already opened on this marker.
   if (infowindow.marker != marker) {
     infowindow.marker = marker;
-    infowindow.setContent('<div>' + marker.title + '</div>');
+    var content = '<div class = "infoWindow">' +
+      '<h3 class = "infoHeader">' + marker.title + '</h3>' +
+      '</div>';
+    infowindow.setContent(content);
     infowindow.open(map, marker);
     // Make sure the marker property is cleared if the infowindow is closed.
     infowindow.addListener('closeclick', function() {
@@ -225,6 +228,9 @@ function createMarkers() {
   var highlightedIcon = makeMarkerIcon('a2adf2');
 
   var largeInfowindow = new google.maps.InfoWindow();
+  var callPopulateInfoWindow = function() {
+     populateInfoWindow(this, largeInfowindow);
+  };
 
   // Create the markers
   for (var i = 0; i < attractionsData.length; i++) {
@@ -242,9 +248,7 @@ function createMarkers() {
     // Push the marker to our array of markers.
     markers.push(marker);
     // Create an onclick event to open the large infowindow at each marker.
-    marker.addListener('click', function() {
-      populateInfoWindow(this, largeInfowindow);
-    });
+    marker.addListener('click', callPopulateInfoWindow);
 
     // somehow this mouseover & mouseout is causing a bug with the knockout bind
     // for curentAttraction :(
