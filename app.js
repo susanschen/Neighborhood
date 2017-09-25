@@ -17,7 +17,7 @@ function closeNav() {
 }
 
 /**
- * The ViewModel Section
+ * The Model ViewModel Section
  */
 //var initialCats = [{
 //  clickCount: 0,
@@ -25,12 +25,6 @@ function closeNav() {
 //  imgSrc: 'img/434164568_fea0ad4013_z.jpg',
 //  imgAttribution: 'https:www.flickr.com/photos/bigtallguy/434164568',
 //  nicknames: ['Casper']
-//  },{
-//  clickCount: 0,
-//  name: 'Babi',
-//  imgSrc: 'img/22252709_010df3379e_z.jpg',
-//  imgAttribution: 'https:www.flickr.com/photos/xshamx/4154543904',
-//  nicknames: ['Bami']
 //  }
 //];
 
@@ -54,15 +48,11 @@ var Attraction = function(data) {
 //var Cat = function(data) {
 //  this.clickCount = ko.observable(data.clickCount);
 //  this.name = ko.observable(data.name);
-//  this.imgSrc = ko.observable(data.imgSrc);
-//  this.imgAttribution = ko.observable(data.imgAttribution);
 //  this.nicknames = ko.observableArray(data.nicknames);
 //  this.title = ko.computed(function() {
 //    var title;
 //    var clicks = this.clickCount();
 //    if(clicks < 5) { title = 'child';
-//    } else if (clicks < 10) { title = 'teen';
-//    } else if (clicks < 15 ) { title = 'adult';
 //    } else { title = 'ninja';
 //    }
 //    return title;
@@ -71,28 +61,20 @@ var Attraction = function(data) {
 
 //// Class ViewModel
 //var ViewModel = function(){
-//  // self gets assigned to the current scope of this,
-//  // so when it's used inside an anonymouse function, it refers to that
 //  var self = this;
-//
-//  // previously octopus getCats()
+
 //  this.cats = ko.observableArray([]);
-//  // see global variable array holding all cat objects
 //  initialCats.forEach(function(cat) {
-//    self.cats.push(new Cat(cat));   // use self, which use outer scope this
+//    self.cats.push(new Cat(cat));
 //  });
 //
-//  // initialize first currentCat
 //  this.currentCat = ko.observable(this.cats()[0]);
 //
-//  // previously octopus setCurrentCat()
 //  this.setCat = function(clickedCat) {
 //    self.currentCat(clickedCat);
 //  };
 //
-//  // previous octopus.incrementCounter()
 //  this.incrementCounter = function() {
-//    // clickCount is a property of Cat, not ViewModel
 //    self.currentCat().clickCount(self.currentCat().clickCount() + 1);
 //  };
 //};
@@ -189,9 +171,7 @@ function initMap() {
 //  document.getElementById('hide-listings').addEventListener('click', hideListings);
 } // ends initMap
 
-// This function populates the infowindow when the marker is clicked. We'll only allow
-// one infowindow which will open at the marker that is clicked, and populate based
-// on that markers position.
+// Populates the infowindow when the marker is clicked
 function populateInfoWindow(marker, infowindow) {
   // Check to make sure the infowindow is not already opened on this marker.
   if (infowindow.marker != marker) {
@@ -205,6 +185,8 @@ function populateInfoWindow(marker, infowindow) {
     infowindow.addListener('closeclick', function() {
       infowindow.marker = null;
     });
+
+
   }
 }
 
@@ -238,14 +220,11 @@ function createMarkers() {
 
     // somehow this mouseover & mouseout is causing a bug with the knockout bind
     // for curentAttraction :(
-    // Two event listeners - one for mouseover, one for mouseout,
-    // to change the colors back and forth.
+    // Two event listeners - to change the colors back and forth.
 //    marker.addListener('mouseover', function() {
-//      this.setIcon(highlightedIcon);
-//    });
+//      this.setIcon(highlightedIcon); });
 //    marker.addListener('mouseout', function() {
-//      this.setIcon(defaultIcon);
-//    });
+//      this.setIcon(defaultIcon); });
   }//ends for loop
 }
 
