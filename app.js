@@ -96,20 +96,21 @@ var ViewModel = function() {
   };
 
   // Filter the lists based on category
-  this.filterCriteria = ko.observableArray(['All', 'Parks', 'Buildings']);
+  this.filterOptions = ['All', 'Parks', 'Buildings'];
+  this.selectedOption = ko.observable('All');
 
-  // Compute the filtered list based on the filterCriteria
+  // Compute the filtered list based on the filterOptions
   this.filteredList = ko.observableArray([]);
 
   self.locations().forEach(function(location){
     console.log('looping through locations');
-    if(self.filterCriteria() == 'All') {
+    if(self.selectedOption() === 'All') {
       console.log('all');
       self.filteredList.push(location);
-    } else if (self.filterCriteria() == 'Parks' && location.category() == 'Parks') {
+    } else if (self.selectedOption() === 'Parks' && location.category() === 'Parks') {
       console.log('parks');
       self.filteredList.push(location);
-    } else if (self.filterCriteria() == 'Buildings' && location.category() == 'Buildings'){
+    } else if (self.selectedOption() === 'Buildings' && location.category() === 'Buildings'){
       console.log('buidlings');
       self.filteredList.push(location);
     }
