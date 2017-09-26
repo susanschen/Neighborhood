@@ -29,13 +29,13 @@ function closeNav() {
 //];
 
 var attractionsData = [
-    {title: 'Central Park', location: {lat: 40.767852, lng: -73.979694}, category: 'Parks'},
-    {title: 'Metropolitan Museum of Art', location: {lat: 40.779437, lng: -73.963244}, category: 'Buildings'},
-    {title: 'Prospect Park Zoo', location: {lat: 40.665375, lng: -73.965414}, category: 'Parks'},
-    {title: 'Times Square', location: {lat: 40.758895, lng: -73.985131}, category: 'Buildings'},
-    {title: 'United Nations', location: {lat: 40.748876, lng: -73.968009}, category: 'Buildings'},
-    {title: 'Empire State Building', location: {lat: 40.748541, lng: -73.985758}, category: 'Buildings'}
-  ];
+  {title: 'Central Park', location: {lat: 40.767852, lng: -73.979694}, category: 'Parks'},
+  {title: 'Metropolitan Museum of Art', location: {lat: 40.779437, lng: -73.963244}, category: 'Buildings'},
+  {title: 'Prospect Park Zoo', location: {lat: 40.665375, lng: -73.965414}, category: 'Parks'},
+  {title: 'Times Square', location: {lat: 40.758895, lng: -73.985131}, category: 'Buildings'},
+  {title: 'United Nations', location: {lat: 40.748876, lng: -73.968009}, category: 'Buildings'},
+  {title: 'Empire State Building', location: {lat: 40.748541, lng: -73.985758}, category: 'Buildings'}
+];
 
 // Class Attraction to hold the observables
 var Attraction = function(data) {
@@ -88,13 +88,33 @@ var ViewModel = function() {
     self.locations.push(new Attraction(attraction));
   });
 
-  // this.currentAttraction = ko.observable(this.locations()[0]);
+  // Let user choose one place to display
   this.currentAttraction = ko.observable();
-
   this.setAttraction = function(clicked) {
     self.currentAttraction(clicked);
     //console.log(self.currentAttraction());
   };
+
+  // Filter the lists based on category
+  this.filterCriteria = ko.observableArray(['All', 'Parks', 'Buildings']);
+
+  // Compute the filtered list based on the filterCriteria
+  this.filteredList = ko.observableArray([]);
+
+  self.locations().forEach(function(location){
+    console.log('looping through locations');
+    if(self.filterCriteria() == 'All') {
+      console.log('all');
+      self.filteredList.push(location);
+    } else if (self.filterCriteria() == 'Parks' && location.category() == 'Parks') {
+      console.log('parks');
+      self.filteredList.push(location);
+    } else if (self.filterCriteria() == 'Buildings' && location.category() == 'Buildings'){
+      console.log('buidlings');
+      self.filteredList.push(location);
+    }
+  });
+
 };
 
 // Start the Knockout bindings
@@ -185,8 +205,6 @@ function populateInfoWindow(marker, infowindow) {
     infowindow.addListener('closeclick', function() {
       infowindow.marker = null;
     });
-
-
   }
 }
 

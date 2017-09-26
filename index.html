@@ -16,11 +16,11 @@ Susan Chen">
         <div class = "closebtn">X</div>
         <h1>Popular Attractions</h1>
         <div>
-<!--
-          <input id="show-listings" type="button" value="Show Listings">
-          <input id="hide-listings" type="button" value="Hide Listings">
--->
-          <ul id = "place-list" data-bind = "foreach: locations" >
+          <p> View
+            <select id="filter" data-bind="options: filterCriteria"></select>
+<!--             optionsAfterRender:  do I need this? -->
+          </p>
+          <ul id = "place-list" data-bind = "foreach: filteredList" >
             <li data-bind = "text: title, click: $parent.setAttraction"></li>
           </ul>
         </div>
