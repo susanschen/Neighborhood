@@ -76,15 +76,15 @@ var ViewModel = function() {
   // Get the list of attractions
   this.locations = ko.observableArray([]);
   attractionsData.forEach(function(attraction) {
-    self.locations.push(new Attraction(attraction));
-  });
+    this.locations.push(new Attraction(attraction));
+  }.bind(this));
 
   // Let user choose one place to display
   this.currentAttraction = ko.observable();
   this.setAttraction = function(clicked) {
-    self.currentAttraction(clicked);
+    this.currentAttraction(clicked);
     //console.log(self.currentAttraction());
-  };
+  }.bind(this);
 
   // Filter the lists based on category
   this.filterOptions = ['All', 'Parks', 'Buildings'];
