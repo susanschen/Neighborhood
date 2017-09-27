@@ -83,7 +83,7 @@ var ViewModel = function() {
   this.currentAttraction = ko.observable();
   this.setAttraction = function(clicked) {
     this.currentAttraction(clicked);
-    //console.log(self.currentAttraction());
+    // TODO: set current marker
   }.bind(this);
 
   // Filter the lists based on category
@@ -179,8 +179,6 @@ function initMap() {
 
   createMarkers();
   showMarkers();
-//  document.getElementById('show-listings').addEventListener('click', showMarkers);
-//  document.getElementById('hide-listings').addEventListener('click', hideListings);
 } // ends initMap
 
 // Populates the infowindow when the marker is clicked
@@ -227,14 +225,6 @@ function createMarkers() {
     markers.push(marker);
     // Create an onclick event to open the large infowindow at each marker.
     marker.addListener('click', callPopulateInfoWindow);
-
-    // somehow this mouseover & mouseout is causing a bug with the knockout bind
-    // for curentAttraction :(
-    // Two event listeners - to change the colors back and forth.
-//    marker.addListener('mouseover', function() {
-//      this.setIcon(highlightedIcon); });
-//    marker.addListener('mouseout', function() {
-//      this.setIcon(defaultIcon); });
   }//ends for loop
 }
 
@@ -248,13 +238,6 @@ function showMarkers() {
   }
   map.fitBounds(bounds);
 }
-
-// This function will loop through the listings and hide them all.
-//function hideListings() {
-//  for (var i = 0; i < markers.length; i++) {
-//    markers[i].setMap(null);
-//  }
-//}
 
 // This function takes in a COLOR, and then creates a new marker
 // icon of that color. The icon will be 21 px wide by 34 high, have an origin
