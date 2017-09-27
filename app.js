@@ -1,22 +1,6 @@
 /* global ko, document, google */
 
 /**
- * The Menu Section
- */
-var openbtn = document.getElementsByClassName('openbtn');
-openbtn[0].addEventListener('click', openNav);
-var closebtn = document.getElementsByClassName('closebtn');
-closebtn[0].addEventListener('click', closeNav);
-
-function openNav() {
-  document.getElementById('panel').className = "sidenav show";
-}
-
-function closeNav() {
-  document.getElementById('panel').className = "sidenav hide";
-}
-
-/**
  * The Model ViewModel Section
  */
 //var initialCats = [{
@@ -81,6 +65,13 @@ var Attraction = function(data) {
 
 var ViewModel = function() {
   var self = this;
+
+  // The Menu
+  this.showMenu = ko.observable(true);
+  this.toggleMenu = function(){
+    this.showMenu(!this.showMenu());
+    console.log('menu: ' + this.showMenu());
+  }.bind(this);
 
   // Get the list of attractions
   this.locations = ko.observableArray([]);

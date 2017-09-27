@@ -57,6 +57,7 @@ h1 {
   padding-top: 60px;
   color: #555;
   background-color: #a2daf2;
+  width: 250px;
 }
 
 .sidenav a {
@@ -85,10 +86,6 @@ h1 {
   font-size: 1.2rem;
   padding: .5em;
   cursor: pointer;
-}
-
-.show {
-  width: 250px;
 }
 
 .hide {

@@ -12,7 +12,8 @@ Susan Chen">
   </head>
   <body>
     <div class = "container">
-      <div id = "panel" class = "sidenav">
+
+      <div id = "panel" class = "sidenav" data-bind ="visible: showMenu, click: toggleMenu">
         <div class = "closebtn">X</div>
         <h1>Popular Attractions</h1>
         <div>
@@ -32,7 +33,9 @@ Susan Chen">
           <h2 data-bind = "text: title"></h2>
         </div>
       </div>
-      <div class = "openbtn">Menu</div>
+
+      <div class = "openbtn" data-bind = "click: toggleMenu">Menu</div>
+
       <div id = "map"></div>
     </div>
 
