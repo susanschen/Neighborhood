@@ -177,18 +177,20 @@ var ViewModel = function () {
   }; // ends initMap
 
   // Populates the infowindow when the marker is clicked
-  this.createInfoWindow = function (marker, infowindow) {
+  this.createInfoWindow = function () {
+    var largeInfowindow = new google.maps.InfoWindow();
+
     // Check to make sure the infowindow is not already opened on this marker.
-    if (infowindow.marker != marker) {
-      infowindow.marker = marker;
+    if (largeInfowindow.marker != this) {
+      largeInfowindow.marker = this;
       var content = '<div class = "infoWindow">' +
-        '<h3 class = "infoHeader">' + marker.title + '</h3>' +
+        '<h3 class = "infoHeader">' + this.title + '</h3>' +
         '</div>';
-      infowindow.setContent(content);
-      infowindow.open(this.map, marker);
+      largeInfowindow.setContent(content);
+      largeInfowindow.open(this.map, this);
       // Make sure the marker property is cleared if the infowindow is closed.
-      infowindow.addListener('closeclick', function () {
-        infowindow.marker = null;
+      largeInfowindow.addListener('closeclick', function () {
+        largeInfowindow.marker = null;
       }.bind(this));
     }
   };
@@ -197,11 +199,6 @@ var ViewModel = function () {
     // Style the markers
     var defaultIcon = this.makeMarkerIcon('f2c6a2');
     // var highlightedIcon = this.makeMarkerIcon('a2adf2');
-
-    var largeInfowindow = new google.maps.InfoWindow();
-    var callCreateInfoWindow = function () {
-      this.createInfoWindow(this, largeInfowindow);
-    }.bind(this);
 
     // Create the markers
     for (var i = 0; i < attractionsData.length; i++) {
@@ -219,12 +216,12 @@ var ViewModel = function () {
       // Push the marker to our array of markers.
       this.markers.push(marker);
       // Create an onclick event to open the large infowindow at each marker.
-      marker.addListener('click', callCreateInfoWindow);
+      marker.addListener('click', this.createInfoWindow);
     }//ends for loop
   };
 
   // Show all markers
-  this.showMarkers = function showMarkers () {
+  this.showMarkers = function () {
     var bounds = new google.maps.LatLngBounds();
     // Extend the boundaries of the map for each marker and display the marker
     for (var i = 0; i < this.markers.length; i++) {
@@ -234,10 +231,17 @@ var ViewModel = function () {
     this.map.fitBounds(bounds);
   };
 
+  // Hide all markers
+  this.hideMarkers = function () {
+    for (var i = 0; i < this.markers.length; i++) {
+      this.markers[i].setMap(null);
+    }
+  };
+
   // This function takes in a COLOR, and then creates a new marker
   // icon of that color. The icon will be 21 px wide by 34 high, have an origin
   // of 0, 0 and be anchored at 10, 34).
-  this.makeMarkerIcon = function makeMarkerIcon (markerColor) {
+  this.makeMarkerIcon = function (markerColor) {
     var markerImage = new google.maps.MarkerImage(
       'https://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
       '|40|_|%E2%80%A2',
@@ -249,7 +253,7 @@ var ViewModel = function () {
   };
 
   // Google Maps API error handler
-  this.mapError = function mapError () {
+  this.mapError = function () {
     alert ("Google Maps failed to load. Please try again later.");
   };
 
