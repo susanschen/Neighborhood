@@ -22,7 +22,7 @@ var attractionsData = [
 ];
 
 // Class Attraction to hold the observables
-var Attraction = function(data) {
+var Attraction = function (data) {
   this.title = ko.observable(data.title);
   this.location = ko.observable(data.location); // does this need to be observed?
   this.category = ko.observable(data.category);
@@ -63,25 +63,25 @@ var Attraction = function(data) {
 //  };
 //};
 
-var ViewModel = function() {
+var ViewModel = function () {
   var self = this;
 
   // The Menu
   this.showMenu = ko.observable(true);
-  this.toggleMenu = function(){
+  this.toggleMenu = function () {
     this.showMenu(!this.showMenu());
     console.log('menu: ' + this.showMenu());
   }.bind(this);
 
   // Get the list of attractions
   this.locations = ko.observableArray([]);
-  attractionsData.forEach(function(attraction) {
+  attractionsData.forEach(function (attraction) {
     this.locations.push(new Attraction(attraction));
   }.bind(this));
 
   // Let user choose one place to display
   this.currentAttraction = ko.observable();
-  this.setAttraction = function(clicked) {
+  this.setAttraction = function (clicked) {
     this.currentAttraction(clicked);
     // TODO: set current marker
   }.bind(this);
@@ -93,7 +93,7 @@ var ViewModel = function() {
   // Compute the filtered list based on the filterOptions
   this.filteredList = ko.observableArray([]);
 
-  self.locations().forEach(function(location){
+  self.locations().forEach(function (location) {
     console.log('looping through locations');
     if(self.selectedOption() === 'All') {
       console.log('all');
@@ -107,153 +107,155 @@ var ViewModel = function() {
     }
   });
 
-};
+  /**
+   * The Map Section
+   */
 
-// Start the Knockout bindings
-ko.applyBindings(new ViewModel());
+  this.map = null;
+  this.markers = [];
 
-/**
- * The Map Section
- */
+  this.initMap = function () {
+    // Map style credit: https://snazzymaps.com/style/42/apple-maps-esque
+    var styles = [
+      { "featureType": "landscape.man_made",
+        "elementType": "geometry",
+        "stylers": [{ "color": "#f7f1df" }] },
+      { "featureType": "landscape.natural",
+        "elementType": "geometry",
+        "stylers": [{ "color": "#d0e3b4" }] },
+      { "featureType": "landscape.natural.terrain",
+        "elementType": "geometry",
+        "stylers": [{ "visibility": "off" }] },
+      { "featureType": "poi",
+        "elementType": "labels",
+        "stylers": [{ "visibility": "off" }] },
+      { "featureType": "poi.business",
+        "elementType": "all",
+        "stylers": [{ "visibility": "off" }] },
+      { "featureType": "poi.medical",
+        "elementType": "geometry",
+        "stylers": [{ "color": "#fbd3da" }] },
+      { "featureType": "poi.park",
+        "elementType": "geometry",
+        "stylers": [{ "color": "#bde6ab" }] },
+      { "featureType": "road",
+        "elementType": "geometry.stroke",
+        "stylers": [{ "visibility": "off" }] },
+      { "featureType": "road",
+        "elementType": "labels",
+        "stylers": [{ "visibility": "off" }] },
+      { "featureType": "road.highway",
+        "elementType": "geometry.fill",
+        "stylers": [{ "color": "#ffe15f" }] },
+      { "featureType": "road.highway",
+        "elementType": "geometry.stroke",
+        "stylers": [{ "color": "#efd151" }] },
+      { "featureType": "road.arterial",
+        "elementType": "geometry.fill",
+        "stylers": [{ "color": "#ffffff" }] },
+      { "featureType": "road.local",
+        "elementType": "geometry.fill",
+        "stylers": [{ "color": "black" }] },
+      { "featureType": "transit.station.airport",
+        "elementType": "geometry.fill",
+        "stylers": [{ "color": "#cfb2db" }] },
+      { "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [{ "color": "#a2daf2" }] }
+    ];
 
-var map;
-var markers = [];
-
-function initMap() {
-  // Map style credit: https://snazzymaps.com/style/42/apple-maps-esque
-  var styles = [
-    { "featureType": "landscape.man_made",
-      "elementType": "geometry",
-      "stylers": [{ "color": "#f7f1df" }] },
-    { "featureType": "landscape.natural",
-      "elementType": "geometry",
-      "stylers": [{ "color": "#d0e3b4" }] },
-    { "featureType": "landscape.natural.terrain",
-      "elementType": "geometry",
-      "stylers": [{ "visibility": "off" }] },
-    { "featureType": "poi",
-      "elementType": "labels",
-      "stylers": [{ "visibility": "off" }] },
-    { "featureType": "poi.business",
-      "elementType": "all",
-      "stylers": [{ "visibility": "off" }] },
-    { "featureType": "poi.medical",
-      "elementType": "geometry",
-      "stylers": [{ "color": "#fbd3da" }] },
-    { "featureType": "poi.park",
-      "elementType": "geometry",
-      "stylers": [{ "color": "#bde6ab" }] },
-    { "featureType": "road",
-      "elementType": "geometry.stroke",
-      "stylers": [{ "visibility": "off" }] },
-    { "featureType": "road",
-      "elementType": "labels",
-      "stylers": [{ "visibility": "off" }] },
-    { "featureType": "road.highway",
-      "elementType": "geometry.fill",
-      "stylers": [{ "color": "#ffe15f" }] },
-    { "featureType": "road.highway",
-      "elementType": "geometry.stroke",
-      "stylers": [{ "color": "#efd151" }] },
-    { "featureType": "road.arterial",
-      "elementType": "geometry.fill",
-      "stylers": [{ "color": "#ffffff" }] },
-    { "featureType": "road.local",
-      "elementType": "geometry.fill",
-      "stylers": [{ "color": "black" }] },
-    { "featureType": "transit.station.airport",
-      "elementType": "geometry.fill",
-      "stylers": [{ "color": "#cfb2db" }] },
-    { "featureType": "water",
-      "elementType": "geometry",
-      "stylers": [{ "color": "#a2daf2" }] }
-  ];
-
-  // Constructor creates a new map
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 40.714728, lng: -73.998672},
-    zoom: 12,
-    styles: styles,
-    mapTypeControl: false
-  });
-
-  createMarkers();
-  showMarkers();
-} // ends initMap
-
-// Populates the infowindow when the marker is clicked
-function populateInfoWindow(marker, infowindow) {
-  // Check to make sure the infowindow is not already opened on this marker.
-  if (infowindow.marker != marker) {
-    infowindow.marker = marker;
-    var content = '<div class = "infoWindow">' +
-      '<h3 class = "infoHeader">' + marker.title + '</h3>' +
-      '</div>';
-    infowindow.setContent(content);
-    infowindow.open(map, marker);
-    // Make sure the marker property is cleared if the infowindow is closed.
-    infowindow.addListener('closeclick', function() {
-      infowindow.marker = null;
+    // Constructor creates a new map
+    this.map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: 40.714728, lng: -73.998672},
+      zoom: 12,
+      styles: styles,
+      mapTypeControl: false
     });
-  }
-}
 
-function createMarkers() {
-  // Style the markers
-  var defaultIcon = makeMarkerIcon('f2c6a2');
-  var highlightedIcon = makeMarkerIcon('a2adf2');
+    this.createMarkers();
+    this.showMarkers();
+  }; // ends initMap
 
-  var largeInfowindow = new google.maps.InfoWindow();
-  var callPopulateInfoWindow = function() {
-     populateInfoWindow(this, largeInfowindow);
+  // Populates the infowindow when the marker is clicked
+  this.createInfoWindow = function (marker, infowindow) {
+    // Check to make sure the infowindow is not already opened on this marker.
+    if (infowindow.marker != marker) {
+      infowindow.marker = marker;
+      var content = '<div class = "infoWindow">' +
+        '<h3 class = "infoHeader">' + marker.title + '</h3>' +
+        '</div>';
+      infowindow.setContent(content);
+      infowindow.open(this.map, marker);
+      // Make sure the marker property is cleared if the infowindow is closed.
+      infowindow.addListener('closeclick', function () {
+        infowindow.marker = null;
+      }.bind(this));
+    }
   };
 
-  // Create the markers
-  for (var i = 0; i < attractionsData.length; i++) {
-    // Get the position from the location array.
-    var position = attractionsData[i].location;
-    var title = attractionsData[i].title;
-    // Create a marker per location, and put into markers array.
-    var marker = new google.maps.Marker({
-      position: position,
-      title: title,
-      animation: google.maps.Animation.DROP,
-      icon: defaultIcon,
-      id: i
-    });
-    // Push the marker to our array of markers.
-    markers.push(marker);
-    // Create an onclick event to open the large infowindow at each marker.
-    marker.addListener('click', callPopulateInfoWindow);
-  }//ends for loop
-}
+  this.createMarkers = function () {
+    // Style the markers
+    var defaultIcon = this.makeMarkerIcon('f2c6a2');
+    // var highlightedIcon = this.makeMarkerIcon('a2adf2');
 
-// Show all markers
-function showMarkers() {
-  var bounds = new google.maps.LatLngBounds();
-  // Extend the boundaries of the map for each marker and display the marker
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(map);
-    bounds.extend(markers[i].position);
-  }
-  map.fitBounds(bounds);
-}
+    var largeInfowindow = new google.maps.InfoWindow();
+    var callCreateInfoWindow = function () {
+      this.createInfoWindow(this, largeInfowindow);
+    }.bind(this);
 
-// This function takes in a COLOR, and then creates a new marker
-// icon of that color. The icon will be 21 px wide by 34 high, have an origin
-// of 0, 0 and be anchored at 10, 34).
-function makeMarkerIcon(markerColor) {
-  var markerImage = new google.maps.MarkerImage(
-    'https://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
-    '|40|_|%E2%80%A2',
-    new google.maps.Size(21, 34),
-    new google.maps.Point(0, 0),
-    new google.maps.Point(10, 34),
-    new google.maps.Size(21,34));
-  return markerImage;
-}
+    // Create the markers
+    for (var i = 0; i < attractionsData.length; i++) {
+      // Get the position from the location array.
+      var position = attractionsData[i].location;
+      var title = attractionsData[i].title;
+      // Create a marker per location, and put into markers array.
+      var marker = new google.maps.Marker({
+        position: position,
+        title: title,
+        animation: google.maps.Animation.DROP,
+        icon: defaultIcon,
+        id: i
+      });
+      // Push the marker to our array of markers.
+      this.markers.push(marker);
+      // Create an onclick event to open the large infowindow at each marker.
+      marker.addListener('click', callCreateInfoWindow);
+    }//ends for loop
+  };
 
-// Google Maps API error handler
-function mapError() {
-  alert("Google Maps failed to load. Please try again later.");
-}
+  // Show all markers
+  this.showMarkers = function showMarkers () {
+    var bounds = new google.maps.LatLngBounds();
+    // Extend the boundaries of the map for each marker and display the marker
+    for (var i = 0; i < this.markers.length; i++) {
+      this.markers[i].setMap(this.map);
+      bounds.extend(this.markers[i].position);
+    }
+    this.map.fitBounds(bounds);
+  };
+
+  // This function takes in a COLOR, and then creates a new marker
+  // icon of that color. The icon will be 21 px wide by 34 high, have an origin
+  // of 0, 0 and be anchored at 10, 34).
+  this.makeMarkerIcon = function makeMarkerIcon (markerColor) {
+    var markerImage = new google.maps.MarkerImage(
+      'https://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
+      '|40|_|%E2%80%A2',
+      new google.maps.Size(21, 34),
+      new google.maps.Point(0, 0),
+      new google.maps.Point(10, 34),
+      new google.maps.Size(21,34));
+    return markerImage;
+  };
+
+  // Google Maps API error handler
+  this.mapError = function mapError () {
+    alert ("Google Maps failed to load. Please try again later.");
+  };
+
+};
+
+var viewModel = new ViewModel();
+
+// Start the Knockout bindings
+ko.applyBindings(viewModel);
