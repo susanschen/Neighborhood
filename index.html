@@ -20,17 +20,13 @@ Susan Chen">
           <p> View
           <select id="filter" data-bind="options: filterOptions, value: selectedOption, click: update"></select></p>
 
-<!--       for testing only-->
-          <p data-bind ="text: selectedOption"></p>
-
-<!--       optionsAfterRender:  do I need this? -->
-
           <ul id = "place-list" data-bind = "foreach: filteredList" >
             <li data-bind = "text: title, click: $parent.setAttraction"></li>
           </ul>
         </div>
         <div data-bind = "with: currentAttraction">
           <h2 data-bind = "text: title"></h2>
+          <p data-bind = "text: wikiMsg"></p>
         </div>
       </div>
 

@@ -13,19 +13,21 @@
 //];
 
 var attractionsData = [
-  {title: 'Central Park', location: {lat: 40.767852, lng: -73.979694}, category: 'Parks', marker: null},
-  {title: 'Metropolitan Museum of Art', location: {lat: 40.779437, lng: -73.963244}, category: 'Buildings', marker: null},
-  {title: 'Prospect Park Zoo', location: {lat: 40.665375, lng: -73.965414}, category: 'Parks', marker: null},
-  {title: 'Times Square', location: {lat: 40.758895, lng: -73.985131}, category: 'Buildings', marker: null},
-  {title: 'United Nations', location: {lat: 40.748876, lng: -73.968009}, category: 'Buildings', marker: null},
-  {title: 'Empire State Building', location: {lat: 40.748541, lng: -73.985758}, category: 'Buildings', marker: null}
+  {title: 'Central Park', location: {lat: 40.767852, lng: -73.979694}, category: 'Parks', marker: null, wikiMsg: 'temp-centralpark'},
+  {title: 'Metropolitan Museum of Art', location: {lat: 40.779437, lng: -73.963244}, category: 'Buildings', marker: null, wikiMsg: 'temp-metro'},
+  {title: 'Prospect Park Zoo', location: {lat: 40.665375, lng: -73.965414}, category: 'Parks', marker: null, wikiMsg: 'temp-zoo'},
+  {title: 'Times Square', location: {lat: 40.758895, lng: -73.985131}, category: 'Buildings', marker: null, wikiMsg: 'temp-times'},
+  {title: 'United Nations', location: {lat: 40.748876, lng: -73.968009}, category: 'Buildings', marker: null, wikiMsg: 'temp-united'},
+  {title: 'Empire State Building', location: {lat: 40.748541, lng: -73.985758}, category: 'Buildings', marker: null, wikiMsg: 'temp-empire'}
 ];
 
 // Class Attraction to hold the observables
 var Attraction = function (data) {
   this.title = ko.observable(data.title);
-  this.location = ko.observable(data.location); // does this need to be observed?
+  this.location = ko.observable(data.location);
   this.category = ko.observable(data.category);
+  // marker is not supposed to be observable per quidelines
+  this.wikiMsg = ko.observable(data.wikiMsg);
 };
 
 //// Class Cat
@@ -111,6 +113,41 @@ var ViewModel = function () {
   };
 
   this.defaultList();
+
+  /*
+   * Wiki API
+   */
+  this.wiki = function () {
+    console.log('insie wiki function');
+    // Display error message after 5 seconds
+    // If AJAX successful, this error message will be cleared
+    // (using timeout since JSONP has no error handle functions.)
+    var wikiTimeout = setTimeout(function() {
+      console.log('insie wiki timeout');
+      self.currentAttraction().wikiMsg('Failed to load Wikipedia resources');
+    }, 3000);
+
+    var wikiUrl = "http://en.wikipedia.org/w/api.php?action=opensearch&search=" +
+      this.currentAttraction().title() + "&format=json";
+    console.log('wikiUrl: ' + wikiUrl);
+    $.ajax(wikiUrl, {
+      dataType: "jsonp"
+      }).done(function (response) {
+        console.log('ajax response: ' + response);
+        var articleList = response[1];
+        var snippetList = response[2];
+        for(var i=0; i<articleList.length; i++) {
+          var article = articleList[i];
+          var snippet = snippetList[i];
+          var url = 'http://en.wikipedia.org/wiki/' + article;
+          self.currentAttraction().wikiMsg(
+            '<li class="article"><a href="' + url + '">' +
+            article + '</a>' + '<p>' +
+            snippet + '</p>' + '</li>');
+        }
+        clearTimeout(wikiTimeout);
+      }); // ends done()
+  };
 
   /**
    * The Map Section
@@ -203,14 +240,9 @@ var ViewModel = function () {
   this.setAttraction = function (clicked) {
     self.currentAttraction(clicked);
     var marker = self.currentAttraction().marker;
-    marker.createInfoWindow();
-    // ?.createInfoWindow();
-
-    // this does not work
-    // this.getCurrentMarker().call(this.createInfoWindow());
-
-    // this does not work
-    // clicked.createInfoWindow();
+    console.log('clicked: ' + marker);
+    self.wiki();
+    // marker.createInfoWindow(); // not a function...
   };
 
   this.createMarkers = function () {
