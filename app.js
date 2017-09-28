@@ -82,18 +82,6 @@ var ViewModel = function () {
 
   // Let user choose one place to display
   this.currentAttraction = ko.observable();
-  this.setAttraction = function (clicked) {
-    this.currentAttraction(clicked);
-    // TODO: set current marker
-
-    // ?.createInfoWindow();
-
-    // this does not work
-    // this.getCurrentMarker().call(this.createInfoWindow());
-
-    // this does not work
-    // clicked.createInfoWindow();
-  }.bind(this);
 
   this.getCurrentMarker = function () {
     var marker;
@@ -210,6 +198,19 @@ var ViewModel = function () {
         largeInfowindow.marker = null;
       }.bind(this));
     }
+  };
+
+  this.setAttraction = function (clicked) {
+    self.currentAttraction(clicked);
+    var marker = self.currentAttraction().marker;
+    marker.createInfoWindow();
+    // ?.createInfoWindow();
+
+    // this does not work
+    // this.getCurrentMarker().call(this.createInfoWindow());
+
+    // this does not work
+    // clicked.createInfoWindow();
   };
 
   this.createMarkers = function () {
