@@ -84,7 +84,27 @@ var ViewModel = function () {
   this.setAttraction = function (clicked) {
     this.currentAttraction(clicked);
     // TODO: set current marker
+
+    // ?.createInfoWindow();
+
+    // this does not work
+    // this.getCurrentMarker().call(this.createInfoWindow());
+
+    // this does not work
+    // clicked.createInfoWindow();
   }.bind(this);
+
+//  this.getCurrentMarker = function () {
+//    var marker;
+//    var activeTitle = this.currentAttraction().title();
+//    for (var i = 0; i < this.markers.length; i++) {
+//      if (this.markers[i].title === activeTitle) {
+//        marker = this.markers[i];
+//        // console.log('match found' + marker);
+//      }
+//    }
+//    return marker;
+//  };
 
   // Filter the lists based on category
   this.filterOptions = ['All', 'Parks', 'Buildings'];
@@ -93,19 +113,28 @@ var ViewModel = function () {
   // Compute the filtered list based on the filterOptions
   this.filteredList = ko.observableArray([]);
 
-  self.locations().forEach(function (location) {
-    console.log('looping through locations');
-    if(self.selectedOption() === 'All') {
-      console.log('all');
-      self.filteredList.push(location);
-    } else if (self.selectedOption() === 'Parks' && location.category() === 'Parks') {
-      console.log('parks');
-      self.filteredList.push(location);
-    } else if (self.selectedOption() === 'Buildings' && location.category() === 'Buildings'){
-      console.log('buidlings');
-      self.filteredList.push(location);
-    }
-  });
+  // Create a new list based on the user choice of drop-down
+  this.update = function () {
+    // clear old list
+    self.locations().forEach(function (location) {
+      self.filteredList.pop(location);
+    });
+    // create new list
+    self.locations().forEach(function (location) {
+      console.log('looping through locations');
+      if(self.selectedOption() === 'All') {
+        //console.log('all');
+        self.filteredList.push(location);
+      } else if (self.selectedOption() === 'Parks' && location.category() === 'Parks') {
+        //console.log('parks');
+        self.filteredList.push(location);
+      } else if (self.selectedOption() === 'Buildings' && location.category() === 'Buildings'){
+        //console.log('buidlings');
+        self.filteredList.push(location);
+      }
+    });
+  };
+  this.update();
 
   /**
    * The Map Section
