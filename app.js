@@ -94,17 +94,17 @@ var ViewModel = function () {
     // clicked.createInfoWindow();
   }.bind(this);
 
-//  this.getCurrentMarker = function () {
-//    var marker;
-//    var activeTitle = this.currentAttraction().title();
-//    for (var i = 0; i < this.markers.length; i++) {
-//      if (this.markers[i].title === activeTitle) {
-//        marker = this.markers[i];
-//        // console.log('match found' + marker);
-//      }
-//    }
-//    return marker;
-//  };
+  this.getCurrentMarker = function () {
+    var marker;
+    var activeTitle = this.currentAttraction().title();
+    for (var i = 0; i < this.markers.length; i++) {
+      if (this.markers[i].title === activeTitle) {
+        marker = this.markers[i];
+        // console.log('match found' + marker);
+      }
+    }
+    return marker;
+  };
 
   // Filter the lists based on category
   this.filterOptions = ['All', 'Parks', 'Buildings'];
@@ -133,8 +133,16 @@ var ViewModel = function () {
         this.filteredList.push(location);
       }
     }.bind(this));
+    // Show only the matched markers on the map
+    this.some(); // ??? how to call a function in knockout? Is it only called from HTML???
+    this.updateMarkers(); // why is it not a function? is it because it's not an observable?
+
   };
   this.update();
+
+  this.some = function () {
+    console.log('is a function?');
+  };
 
   /**
    * The Map Section
@@ -264,6 +272,24 @@ var ViewModel = function () {
   this.hideMarkers = function () {
     for (var i = 0; i < this.markers.length; i++) {
       this.markers[i].setMap(null);
+    }
+  };
+
+  // Show only the markers on the filtered list
+  this.updateMarkers = function () {
+    var listTitle, markerTitle;
+    // clear all markers
+    this.hideMarkers();
+
+    // Show the markers that are on the filtered list
+    // this.locations().forEach(function (location) {}
+    for (var i = 0; i < this.markers.length; i++) {
+      // lists may not match in length.... need to rewrite this
+      listTitle = this.filteredList()[i].title;
+      markerTitle = this.markers[i].title;
+      if (listTitle === markerTitle) {
+        this.markers[i].setMap(this.map);
+      }
     }
   };
 
