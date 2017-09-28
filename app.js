@@ -64,13 +64,13 @@ var Attraction = function (data) {
 //};
 
 var ViewModel = function () {
-  var self = this;
+  // var self = this;
 
   // The Menu
   this.showMenu = ko.observable(true);
   this.toggleMenu = function () {
     this.showMenu(!this.showMenu());
-    console.log('menu: ' + this.showMenu());
+    // console.log('menu: ' + this.showMenu());
   }.bind(this);
 
   // Get the list of attractions
@@ -116,23 +116,23 @@ var ViewModel = function () {
   // Create a new list based on the user choice of drop-down
   this.update = function () {
     // clear old list
-    self.locations().forEach(function (location) {
-      self.filteredList.pop(location);
-    });
+    this.locations().forEach(function (location) {
+      this.filteredList.pop(location);
+    }.bind(this));
     // create new list
-    self.locations().forEach(function (location) {
-      console.log('looping through locations');
-      if(self.selectedOption() === 'All') {
-        //console.log('all');
-        self.filteredList.push(location);
-      } else if (self.selectedOption() === 'Parks' && location.category() === 'Parks') {
-        //console.log('parks');
-        self.filteredList.push(location);
-      } else if (self.selectedOption() === 'Buildings' && location.category() === 'Buildings'){
-        //console.log('buidlings');
-        self.filteredList.push(location);
+    this.locations().forEach(function (location) {
+      // console.log('looping through locations');
+      if(this.selectedOption() === 'All') {
+        // console.log('all');
+        this.filteredList.push(location);
+      } else if (this.selectedOption() === 'Parks' && location.category() === 'Parks') {
+        // console.log('parks');
+        this.filteredList.push(location);
+      } else if (this.selectedOption() === 'Buildings' && location.category() === 'Buildings'){
+        // console.log('buidlings');
+        this.filteredList.push(location);
       }
-    });
+    }.bind(this));
   };
   this.update();
 
