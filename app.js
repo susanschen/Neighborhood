@@ -13,12 +13,12 @@
 //];
 
 var attractionsData = [
-  {title: 'Central Park', location: {lat: 40.767852, lng: -73.979694}, category: 'Parks'},
-  {title: 'Metropolitan Museum of Art', location: {lat: 40.779437, lng: -73.963244}, category: 'Buildings'},
-  {title: 'Prospect Park Zoo', location: {lat: 40.665375, lng: -73.965414}, category: 'Parks'},
-  {title: 'Times Square', location: {lat: 40.758895, lng: -73.985131}, category: 'Buildings'},
-  {title: 'United Nations', location: {lat: 40.748876, lng: -73.968009}, category: 'Buildings'},
-  {title: 'Empire State Building', location: {lat: 40.748541, lng: -73.985758}, category: 'Buildings'}
+  {title: 'Central Park', location: {lat: 40.767852, lng: -73.979694}, category: 'Parks', marker: null},
+  {title: 'Metropolitan Museum of Art', location: {lat: 40.779437, lng: -73.963244}, category: 'Buildings', marker: null},
+  {title: 'Prospect Park Zoo', location: {lat: 40.665375, lng: -73.965414}, category: 'Parks', marker: null},
+  {title: 'Times Square', location: {lat: 40.758895, lng: -73.985131}, category: 'Buildings', marker: null},
+  {title: 'United Nations', location: {lat: 40.748876, lng: -73.968009}, category: 'Buildings', marker: null},
+  {title: 'Empire State Building', location: {lat: 40.748541, lng: -73.985758}, category: 'Buildings', marker: null}
 ];
 
 // Class Attraction to hold the observables
@@ -64,7 +64,8 @@ var Attraction = function (data) {
 //};
 
 var ViewModel = function () {
-  // var self = this;
+  // http://knockoutjs.com/documentation/computedObservables.html#managing-this
+  var self = this;
 
   // The Menu
   this.showMenu = ko.observable(true);
@@ -111,38 +112,17 @@ var ViewModel = function () {
   this.selectedOption = ko.observable('All');
 
   // Compute the filtered list based on the filterOptions
-  this.filteredList = ko.observableArray([]);
+  this.filteredList = ko.observableArray();
 
-  // Create a new list based on the user choice of drop-down
-  this.update = function () {
-    // clear old list
+  // Start the filteredList with the locations array
+  this.defaultList = function () {
     this.locations().forEach(function (location) {
-      this.filteredList.pop(location);
-    }.bind(this));
-    // create new list
-    this.locations().forEach(function (location) {
-      // console.log('looping through locations');
-      if(this.selectedOption() === 'All') {
-        // console.log('all');
-        this.filteredList.push(location);
-      } else if (this.selectedOption() === 'Parks' && location.category() === 'Parks') {
-        // console.log('parks');
-        this.filteredList.push(location);
-      } else if (this.selectedOption() === 'Buildings' && location.category() === 'Buildings'){
-        // console.log('buidlings');
-        this.filteredList.push(location);
-      }
-    }.bind(this));
-    // Show only the matched markers on the map
-    this.some(); // ??? how to call a function in knockout? Is it only called from HTML???
-    this.updateMarkers(); // why is it not a function? is it because it's not an observable?
-
+      // console.log(location);
+      self.filteredList().push(location);
+    });
   };
-  this.update();
 
-  this.some = function () {
-    console.log('is a function?');
-  };
+  this.defaultList();
 
   /**
    * The Map Section
@@ -250,9 +230,12 @@ var ViewModel = function () {
         icon: defaultIcon,
         id: i
       });
+
+      // add the marker to the matching location
+      self.locations()[i].marker = marker;
       // Push the marker to our array of markers.
       this.markers.push(marker);
-      // Create an onclick event to open the large infowindow at each marker.
+      // Create an onclick event to open the infowindow at each marker.
       marker.addListener('click', this.createInfoWindow);
     }//ends for loop
   };
@@ -275,22 +258,30 @@ var ViewModel = function () {
     }
   };
 
-  // Show only the markers on the filtered list
-  this.updateMarkers = function () {
-    var listTitle, markerTitle;
-    // clear all markers
+  // Create a new list and markers based on the user choice of drop-down
+  this.update = function () {
+
+    // clear old list and markers
+    this.locations().forEach(function (location) {
+      this.filteredList.pop(location);
+    }.bind(this));
     this.hideMarkers();
 
-    // Show the markers that are on the filtered list
-    // this.locations().forEach(function (location) {}
-    for (var i = 0; i < this.markers.length; i++) {
-      // lists may not match in length.... need to rewrite this
-      listTitle = this.filteredList()[i].title;
-      markerTitle = this.markers[i].title;
-      if (listTitle === markerTitle) {
-        this.markers[i].setMap(this.map);
+    // create new list and markers
+    this.locations().forEach(function (location) {
+      // console.log(location);
+      // console.log(location.marker);
+      if(this.selectedOption() === 'All') {
+        this.filteredList.push(location);
+        location.marker.setMap(self.map);
+      } else if (this.selectedOption() === 'Parks' && location.category() === 'Parks') {
+        this.filteredList.push(location);
+        location.marker.setMap(self.map);
+      } else if (this.selectedOption() === 'Buildings' && location.category() === 'Buildings'){
+        this.filteredList.push(location);
+        location.marker.setMap(self.map);
       }
-    }
+    }.bind(this));
   };
 
   // This function takes in a COLOR, and then creates a new marker
