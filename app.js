@@ -130,7 +130,7 @@ var ViewModel = function () {
 
     // Retreive Wikiepedia info,
     // on successful rertreival display the first article and clear timeout
-    var wikiAPI = "http://en.wikipedia.org/w/api.php?action=opensearch&search=" +
+    var wikiAPI = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" +
       this.currentAttraction().title() + "&format=json";
     console.log('wikiAPI: ' + wikiAPI);
     $.ajax(wikiAPI, {
