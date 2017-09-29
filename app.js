@@ -193,21 +193,21 @@ var ViewModel = function () {
   }; // ends initMap
 
   // Populates the infowindow when the marker is clicked
-  this.createInfoWindow = function () {
+  this.createInfoWindow = function (marker) {
     var largeInfowindow = new google.maps.InfoWindow();
 
     // Check to make sure the infowindow is not already opened on this marker.
-    if (largeInfowindow.marker !== this) {
-      largeInfowindow.marker = this;
+    if (largeInfowindow.marker !== marker) {
+      largeInfowindow.marker = marker;
       var content = '<div class = "infoWindow">' +
-        '<h3 class = "infoHeader">' + this.title + '</h3>' +
+        '<h3 class = "infoHeader">' + marker.title + '</h3>' +
         '</div>';
       largeInfowindow.setContent(content);
-      largeInfowindow.open(this.map, this);
+      largeInfowindow.open(this.map, marker);
       // Make sure the marker property is cleared if the infowindow is closed.
       largeInfowindow.addListener('closeclick', function () {
         largeInfowindow.marker = null;
-      }.bind(this));
+      });
     }
   };
 
@@ -218,20 +218,21 @@ var ViewModel = function () {
     self.wiki();
     // TODO:
     // - close any open InfoWindow
-    // - open matching infoWindow
 
-//  var marker = self.currentAttraction().marker;
-//  console.log('clicked: ' + marker);
-    /*
-     * Need to know why it is not a function...
-     */
-    self.currentAttraction().marker.createInfoWindow();
+    // Open matching InfoWindow
+    var marker = self.currentAttraction().marker;
+    self.createInfoWindow(marker);
   };
 
   this.createMarkers = function () {
     // Style the markers
     var defaultIcon = this.makeMarkerIcon('f2c6a2');
     // var highlightedIcon = this.makeMarkerIcon('a2adf2');
+
+    // Eventually open infoWindow, passing the current marker as 'this'
+    function callCreateInfoWindow () {
+       self.createInfoWindow(this);
+    }
 
     // Create the markers
     for (var i = 0; i < attractionsData.length; i++) {
@@ -252,7 +253,7 @@ var ViewModel = function () {
       // Push the marker to our array of markers.
       this.markers.push(marker);
       // Create an onclick event to open the infowindow at each marker.
-      marker.addListener('click', this.createInfoWindow);
+      marker.addListener('click', callCreateInfoWindow);
     }//ends for loop
   };
 
