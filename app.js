@@ -3,7 +3,6 @@
 /**
  * TODO:
  * - get wiki when user clicks on marker
- * - clear out wiki when user choose from filter drop-down menu
  * - Open matching infowindow when location from the list is selected
  * - Make page responsive/pretty
  */
@@ -47,6 +46,9 @@ var ViewModel = function () {
     // console.log('menu: ' + this.showMenu());
   }.bind(this);
 
+  // Hold true of false to show wiki section
+  this.showWiki = ko.observable(false);
+
   // Get the list of attractions
   this.locations = ko.observableArray([]);
   attractionsData.forEach(function (attraction) {
@@ -89,6 +91,9 @@ var ViewModel = function () {
    * Wiki API
    */
   this.wiki = function () {
+    // Set the visibility for the wiki section to true
+    self.showWiki(true);
+
     console.log('insie wiki function');
     // Display error message after 5 seconds
     // If AJAX successful, this error message will be cleared
@@ -264,7 +269,10 @@ var ViewModel = function () {
     }
   };
 
-  // Create a new list and markers based on the user choice of drop-down
+  // When a user clicks on the drop-down:
+  // Create a new list and markers based on the user choice
+  // Hide wiki section
+  // Close infowindow
   this.update = function () {
 
     // clear old list and markers
@@ -288,6 +296,11 @@ var ViewModel = function () {
         location.marker.setMap(self.map);
       }
     }.bind(this));
+
+    // clear any wiki text
+    self.showWiki(false);
+
+    // close any open infoWindow
   };
 
   // This function takes in a COLOR, and then creates a new marker

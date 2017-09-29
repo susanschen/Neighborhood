@@ -24,7 +24,7 @@ Susan Chen">
             <li data-bind = "text: title, click: $parent.setAttraction"></li>
           </ul>
         </div>
-        <div data-bind = "with: currentAttraction">
+        <div data-bind = "with: currentAttraction, visible: showWiki">
           <div class = "article">
             <a data-bind = "attr: {href: wikiUrl}, text: title">
             </a>
