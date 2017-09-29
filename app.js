@@ -1,16 +1,16 @@
 /* global ko, document, google */
 
 /**
- * The Model ViewModel Section
+ * TODO:
+ * - get wiki when user clicks on marker
+ * - clear out wiki when user choose from filter drop-down menu
+ * - Open matching infowindow when location from the list is selected
+ * - Make page responsive/pretty
  */
-//var initialCats = [{
-//  clickCount: 0,
-//  name: 'Tabby',
-//  imgSrc: 'img/434164568_fea0ad4013_z.jpg',
-//  imgAttribution: 'https:www.flickr.com/photos/bigtallguy/434164568',
-//  nicknames: ['Casper']
-//  }
-//];
+
+/**
+ * The array for the Attraction Model to hold location details
+ */
 
 var attractionsData = [
   {title: 'Central Park', location: {lat: 40.767852, lng: -73.979694}, category: 'Parks', marker: null, wikiUrl: '', wikiText: ''},
@@ -31,40 +31,10 @@ var Attraction = function (data) {
   this.wikiText = ko.observable(data.wikiText);
 };
 
-//// Class Cat
-//var Cat = function(data) {
-//  this.clickCount = ko.observable(data.clickCount);
-//  this.name = ko.observable(data.name);
-//  this.nicknames = ko.observableArray(data.nicknames);
-//  this.title = ko.computed(function() {
-//    var title;
-//    var clicks = this.clickCount();
-//    if(clicks < 5) { title = 'child';
-//    } else { title = 'ninja';
-//    }
-//    return title;
-//  }, this);
-//};
-
-//// Class ViewModel
-//var ViewModel = function(){
-//  var self = this;
-
-//  this.cats = ko.observableArray([]);
-//  initialCats.forEach(function(cat) {
-//    self.cats.push(new Cat(cat));
-//  });
-//
-//  this.currentCat = ko.observable(this.cats()[0]);
-//
-//  this.setCat = function(clickedCat) {
-//    self.currentCat(clickedCat);
-//  };
-//
-//  this.incrementCounter = function() {
-//    self.currentCat().clickCount(self.currentCat().clickCount() + 1);
-//  };
-//};
+/**
+ * The ViewModel which also have map and wikipedia code
+ *
+ */
 
 var ViewModel = function () {
   // http://knockoutjs.com/documentation/computedObservables.html#managing-this
