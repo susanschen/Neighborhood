@@ -25,8 +25,13 @@ Susan Chen">
           </ul>
         </div>
         <div data-bind = "with: currentAttraction">
-          <h2 data-bind = "text: title"></h2>
-          <p data-bind = "text: wikiMsg"></p>
+          <div class = "article">
+<!--            why is link not showing up?-->
+            <a data-bind = "attr: {href: wikiUrl}, text: title">
+            </a>
+            <p data-bind = "text: wikiText"></p>
+            <p>Info Source: <span data-bind= "text: wikiUrl"></span></p>
+          </div>
         </div>
       </div>
 
