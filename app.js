@@ -4,6 +4,7 @@
  * TODO:
  * - get wiki when user clicks on marker
  * - Open matching infowindow when location from the list is selected
+ * - close any infowindow when user clicks on drop-down
  * - Make page responsive/pretty
  */
 
@@ -58,17 +59,17 @@ var ViewModel = function () {
   // Let user choose one place to display
   this.currentAttraction = ko.observable();
 
-  this.getCurrentMarker = function () {
-    var marker;
-    var activeTitle = this.currentAttraction().title();
-    for (var i = 0; i < this.markers.length; i++) {
-      if (this.markers[i].title === activeTitle) {
-        marker = this.markers[i];
-        // console.log('match found' + marker);
-      }
-    }
-    return marker;
-  };
+//  this.getCurrentMarker = function () {
+//    var marker;
+//    var activeTitle = this.currentAttraction().title();
+//    for (var i = 0; i < this.markers.length; i++) {
+//      if (this.markers[i].title === activeTitle) {
+//        marker = this.markers[i];
+//        // console.log('match found' + marker);
+//      }
+//    }
+//    return marker;
+//  };
 
   // Filter the lists based on category
   this.filterOptions = ['All', 'Parks', 'Buildings'];
@@ -89,38 +90,35 @@ var ViewModel = function () {
 
   /*
    * Wiki API
+   * Calls wikipedia and get the snippet
+   * Set Timeout as error handler and clear timeout if AJAX is done
    */
   this.wiki = function () {
     // Set the visibility for the wiki section to true
     self.showWiki(true);
 
-    console.log('insie wiki function');
     // Display error message after 5 seconds
-    // If AJAX successful, this error message will be cleared
     // (using timeout since JSONP has no error handle functions.)
     var wikiTimeout = setTimeout(function() {
-      console.log('insie wiki timeout');
       self.currentAttraction().wikiText('Failed to load Wikipedia resources');
     }, 5000);
 
     // Retreive Wikiepedia info,
     // on successful rertreival display the first article and clear timeout
     var wikiAPI = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" +
-      this.currentAttraction().title() + "&format=json";
-    console.log('wikiAPI: ' + wikiAPI);
+    this.currentAttraction().title() + "&format=json";
+//    console.log('wikiAPI: ' + wikiAPI);
     $.ajax(wikiAPI, {
       dataType: "jsonp"
       }).done(function (response) {
-        console.log('WIKI RESPONSE: ' + response);
+//        console.log('WIKI RESPONSE: ' + response);
         var articleList = response[1];
         var snippetList = response[2];
-        // for(var i=0; i<articleList.length; i++) {
         // Display just the first article
-          var article = articleList[0];
-          var snippet = snippetList[0];
-          self.currentAttraction().wikiUrl('http://en.wikipedia.org/wiki/' + article);
-          self.currentAttraction().wikiText(snippet);
-        // }
+        var article = articleList[0];
+        var snippet = snippetList[0];
+        self.currentAttraction().wikiUrl('http://en.wikipedia.org/wiki/' + article);
+        self.currentAttraction().wikiText(snippet);
         clearTimeout(wikiTimeout);
       }); // ends done()
   };
@@ -218,9 +216,16 @@ var ViewModel = function () {
   this.setAttraction = function (clicked) {
     self.currentAttraction(clicked);
     self.wiki();
+    // TODO:
+    // - close any open InfoWindow
+    // - open matching infoWindow
+
 //  var marker = self.currentAttraction().marker;
 //  console.log('clicked: ' + marker);
-    self.currentAttraction().marker.createInfoWindow(); // not a function...
+    /*
+     * Need to know why it is not a function...
+     */
+    self.currentAttraction().marker.createInfoWindow();
   };
 
   this.createMarkers = function () {
@@ -300,7 +305,7 @@ var ViewModel = function () {
     // clear any wiki text
     self.showWiki(false);
 
-    // close any open infoWindow
+    // todo: close any open infoWindow
   };
 
   // This function takes in a COLOR, and then creates a new marker
