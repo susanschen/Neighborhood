@@ -219,6 +219,7 @@ var ViewModel = function () {
   // and open matching infoWindow & Wiki article
   this.setAttraction = function (clicked) {
     self.currentAttraction(clicked);
+    // get wiki info
     self.wiki();
     // Open matching InfoWindow
     var marker = self.currentAttraction().marker;
@@ -297,6 +298,10 @@ var ViewModel = function () {
       this.filteredList.pop(location);
     }.bind(this));
     this.hideMarkers();
+    // close any open infowindow ---- code not working ---------
+//    console.log('Before self.largeInfowindow.marker' + self.largeInfowindow.marker);
+//    self.largeInfowindow.marker = null;
+//    console.log('After self.largeInfowindow.marker' + self.largeInfowindow.marker);
 
     // create new list and markers
     this.locations().forEach(function (location) {
@@ -318,6 +323,7 @@ var ViewModel = function () {
     self.showWiki(false);
 
     // todo: close any open infoWindow
+//    console.log('final self.largeInfowindow.marker' + self.largeInfowindow.marker);
   };
 
   // This function takes in a COLOR, and then creates a new marker
