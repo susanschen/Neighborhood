@@ -2,8 +2,7 @@
 
 /**
  * TODO:
- * - get wiki when user clicks on marker
- * - close any infowindow when user clicks on drop-down
+ * - Make marker bounce on select
  * - Make page responsive/pretty
  */
 
@@ -25,7 +24,6 @@ var Attraction = function (data) {
   this.title = ko.observable(data.title);
   this.location = ko.observable(data.location);
   this.category = ko.observable(data.category);
-  // marker is not supposed to be observable per quidelines
   this.wikiUrl = ko.observable(data.wikiUrl);
   this.wikiText = ko.observable(data.wikiText);
 };
@@ -241,7 +239,6 @@ var ViewModel = function () {
 //      // call wiki
 //      self.wiki();
 //    }
-
     // Create the markers
     for (var i = 0; i < attractionsData.length; i++) {
       // Get the position from the location array.
@@ -260,15 +257,12 @@ var ViewModel = function () {
       self.locations()[i].marker = marker;
       // Push the marker to our array of markers.
       this.markers.push(marker);
-      // Create an onclick event to open the infowindow at each marker.
 
-      // HOW TO PASS 'I' TO ANON FUNCTION????
+      // Create an onclick event to open the infowindow at each marker.
       marker.addListener('click', function () {
         self.createInfoWindow(this);
-         // add the location to currentAttraction, but i is not accessible from anon function
-        self.currentAttraction(self.locations()[i]);
-        console.log('set attracton to locations i: ' + i + ' - ' + self.locations()[i] + self.currentAttraction());
-        // wiki needs currentAttraction to be defined to work!!!
+        self.currentAttraction(self.locations()[this.id]);
+        console.log('set attracton to this id: ' + this.id + ' - ' + self.locations()[this.id] + self.currentAttraction());
         self.wiki();
       });
     }//ends for loop
