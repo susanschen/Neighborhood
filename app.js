@@ -218,11 +218,13 @@ var ViewModel = function () {
   // Sets the current Attraction based on user click,
   // and open matching infoWindow & Wiki article
   this.setAttraction = function (clicked) {
+    self.stopBounce();
     self.currentAttraction(clicked);
     // get wiki info
     self.wiki();
-    // Open matching InfoWindow
+    // Bounce matching marker and open InfoWindow
     var marker = self.currentAttraction().marker;
+    marker.setAnimation(google.maps.Animation.BOUNCE);
     self.createInfoWindow(marker);
     console.log('called infowindow');
   };
@@ -262,6 +264,8 @@ var ViewModel = function () {
 
       // Create an onclick event to open the infowindow at each marker.
       marker.addListener('click', function () {
+        self.stopBounce();
+        this.setAnimation(google.maps.Animation.BOUNCE);
         self.createInfoWindow(this);
         console.log('called infowindow');
         self.currentAttraction(self.locations()[this.id]);
@@ -269,6 +273,13 @@ var ViewModel = function () {
         self.wiki();
       });
     }//ends for loop
+  };
+
+  // Stop all markers from bouncing
+  this.stopBounce = function () {
+    for (var i = 0; i < this.markers.length; i++) {
+      this.markers[i].setAnimation(null);
+    }
   };
 
   // Show all markers
