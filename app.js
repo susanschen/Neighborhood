@@ -79,7 +79,6 @@ var ViewModel = function () {
     // on successful rertreival display the first article and clear timeout
     var wikiAPI = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" +
     self.currentAttraction().title() + "&format=json";
-    console.log('wikiAPI: ' + wikiAPI);
     $.ajax(wikiAPI, {
       dataType: "jsonp"
       }).done(function (response) {
