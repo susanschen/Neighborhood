@@ -16,55 +16,51 @@ input {
 }
 
 h1 {
-  color: #fff;
   font-size: 22px;
+  color: #a2daf2;
   margin: 0 0 10px 0;
   text-align: center;
-}
-
-#hide-listings,
-#show-listings {
-  width: 48%;
 }
 
 #map {
   position: absolute;
   height: 100%;
-  left: 5px;
+  left: 0;
   right: 0;
   bottom: 0;
 }
 
 .infoWindow {
-  width: 300px;
-  height: 300px;
+  width: 250px;
+  height: 200px;
   overflow: auto;
 }
 
 .infoHeader {
   text-align: center;
+  font-size: 1.5rem;
+  color: #a2daf2;
 }
 
 .sidenav {
   height: 100%;
-  width: 0;
+  width: 250px;
   position: fixed;
   z-index: 2;
   top: 0;
   left: 0;
+  padding: 20px;
   overflow-x: hidden;
   transition: 0.5s;
-  padding-top: 60px;
   color: #555;
-  background-color: #a2daf2;
-  width: 250px;
+  background-color: white;
+  box-shadow: 5px 5px 10px #bbb;
 }
 
 .sidenav a {
   padding: 8px 8px 8px 32px;
   text-decoration: none;
   font-size: 25px;
-  color: #fff;
   display: block;
   transition: 0.3s;
 }
@@ -75,6 +71,9 @@ h1 {
 
 .sidenav .closebtn {
   cursor: pointer;
+  float: right;
+  font-size: 1.3rem;
+  color: #a2c6f2;
 }
 
 .openbtn {
@@ -83,16 +82,19 @@ h1 {
   top: 10px;
   left: 10px;
   background-color: #fff;
+  box-shadow: 5px 5px 10px #bbb;
   font-size: 1.2rem;
   padding: .5em;
   cursor: pointer;
 }
 
-.hide {
-  width: 0;
-}
-
 @media screen and (max-height: 450px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
+}
+
+@media screen and (max-width: 450px) {
+  .sidenav {
+    height: auto;
+  }
 }
