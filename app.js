@@ -224,6 +224,7 @@ var ViewModel = function () {
     // Open matching InfoWindow
     var marker = self.currentAttraction().marker;
     self.createInfoWindow(marker);
+    console.log('called infowindow');
   };
 
   this.createMarkers = function () {
@@ -262,6 +263,7 @@ var ViewModel = function () {
       // Create an onclick event to open the infowindow at each marker.
       marker.addListener('click', function () {
         self.createInfoWindow(this);
+        console.log('called infowindow');
         self.currentAttraction(self.locations()[this.id]);
         console.log('set attracton to this id: ' + this.id + ' - ' + self.locations()[this.id] + self.currentAttraction());
         self.wiki();
@@ -299,9 +301,9 @@ var ViewModel = function () {
     }.bind(this));
     this.hideMarkers();
     // close any open infowindow ---- code not working ---------
-//    console.log('Before self.largeInfowindow.marker' + self.largeInfowindow.marker);
-//    self.largeInfowindow.marker = null;
-//    console.log('After self.largeInfowindow.marker' + self.largeInfowindow.marker);
+    console.log('Before self.largeInfowindow.marker' + self.largeInfowindow.marker);
+    self.largeInfowindow.close()
+    console.log('After self.largeInfowindow.marker' + self.largeInfowindow.marker);
 
     // create new list and markers
     this.locations().forEach(function (location) {
@@ -323,7 +325,7 @@ var ViewModel = function () {
     self.showWiki(false);
 
     // todo: close any open infoWindow
-//    console.log('final self.largeInfowindow.marker' + self.largeInfowindow.marker);
+    console.log('final self.largeInfowindow.marker' + self.largeInfowindow.marker);
   };
 
   // This function takes in a COLOR, and then creates a new marker
