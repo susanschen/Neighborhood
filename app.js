@@ -226,6 +226,7 @@ var ViewModel = function () {
       // Listen for closeclick on the infowindow
       self.largeInfowindow.addListener('closeclick', function () {
         self.largeInfowindow.marker = null;
+        self.stopBounce();
       });
     }
   };
