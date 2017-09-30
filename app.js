@@ -45,7 +45,7 @@ var ViewModel = function () {
   }.bind(this);
 
   // Hold true of false to show wiki section
-  this.showWiki = ko.observable(false);
+  //this.showWiki = ko.observable(false);
 
   // Get the list of attractions
   this.locations = ko.observableArray([]);
@@ -93,20 +93,21 @@ var ViewModel = function () {
    */
   this.wiki = function () {
     // Set the visibility for the wiki section to true
-    self.showWiki(true);
+    //self.showWiki(true);
     console.log("current: " + self.currentAttraction());
 
     // Display error message after 5 seconds
     // (using timeout since JSONP has no error handle functions.)
     var wikiTimeout = setTimeout(function() {
       self.currentAttraction().wikiText('Failed to load Wikipedia resources');
+      self.currentAttraction().wikiUrl('Unavailable');
     }, 5000);
 
     // Retreive Wikiepedia info,
     // on successful rertreival display the first article and clear timeout
     var wikiAPI = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" +
     self.currentAttraction().title() + "&format=json";
-//    console.log('wikiAPI: ' + wikiAPI);
+    console.log('wikiAPI: ' + wikiAPI);
     $.ajax(wikiAPI, {
       dataType: "jsonp"
       }).done(function (response) {
@@ -118,7 +119,13 @@ var ViewModel = function () {
         var snippet = snippetList[0];
         self.currentAttraction().wikiUrl('http://en.wikipedia.org/wiki/' + article);
         self.currentAttraction().wikiText(snippet);
+
+      console.log ('INSIDE WIKI: wikiUrl: ' + self.currentAttraction().wikiUrl() + ' wikiText: ' + self.currentAttraction().wikiText());
         clearTimeout(wikiTimeout);
+
+        // Open infoWindow when wiki is succussful
+        self.createInfoWindow(self.currentAttraction().marker);
+        console.log('called infowindow');
       }); // ends done()
   };
 
@@ -203,12 +210,20 @@ var ViewModel = function () {
     // Check to make sure the infowindow is not already opened on this marker.
     if (self.largeInfowindow.marker !== marker) {
       self.largeInfowindow.marker = marker;
+
+      // Get the content, set it, and open infowindow on the map
+      var wikiUrl = self.currentAttraction().wikiUrl();
+      var wikiText = self.currentAttraction().wikiText();
       var content = '<div class = "infoWindow">' +
-        '<h3 class = "infoHeader">' + marker.title + '</h3>' +
+        '<a class = "infoHeader" href="' + wikiUrl + '">' +
+        marker.title + '</a>' +
+        '<p class = "wikiText">' + wikiText + '</p>' +
+        '<p class = "wikiUrl"> Source: ' + wikiUrl + '</p>' +
         '</div>';
+      console.log ('INSIDE INFOWIN: wikiUrl: ' + wikiUrl + ' wikiText: ' + wikiText + 'content: ' + content);
       self.largeInfowindow.setContent(content);
       self.largeInfowindow.open(this.map, marker);
-      // Make sure the marker property is cleared if the infowindow is closed.
+      // Listen for closeclick on the infowindow
       self.largeInfowindow.addListener('closeclick', function () {
         self.largeInfowindow.marker = null;
       });
@@ -220,13 +235,11 @@ var ViewModel = function () {
   this.setAttraction = function (clicked) {
     self.stopBounce();
     self.currentAttraction(clicked);
-    // get wiki info
-    self.wiki();
-    // Bounce matching marker and open InfoWindow
+    // Bounce matching marker
     var marker = self.currentAttraction().marker;
     marker.setAnimation(google.maps.Animation.BOUNCE);
-    self.createInfoWindow(marker);
-    console.log('called infowindow');
+    // get wiki info (ASYNC)
+    self.wiki();
   };
 
   this.createMarkers = function () {
@@ -266,11 +279,11 @@ var ViewModel = function () {
       marker.addListener('click', function () {
         self.stopBounce();
         this.setAnimation(google.maps.Animation.BOUNCE);
-        self.createInfoWindow(this);
-        console.log('called infowindow');
         self.currentAttraction(self.locations()[this.id]);
         console.log('set attracton to this id: ' + this.id + ' - ' + self.locations()[this.id] + self.currentAttraction());
         self.wiki();
+//        self.createInfoWindow(this);
+//        console.log('called infowindow');
       });
     }//ends for loop
   };
@@ -305,16 +318,13 @@ var ViewModel = function () {
   // Hide wiki section
   // Close infowindow
   this.update = function () {
-
     // clear old list and markers
     this.locations().forEach(function (location) {
       this.filteredList.pop(location);
     }.bind(this));
     this.hideMarkers();
-    // close any open infowindow ---- code not working ---------
-    console.log('Before self.largeInfowindow.marker' + self.largeInfowindow.marker);
-    self.largeInfowindow.close()
-    console.log('After self.largeInfowindow.marker' + self.largeInfowindow.marker);
+    // close any open infowindow
+    self.largeInfowindow.close();
 
     // create new list and markers
     this.locations().forEach(function (location) {
@@ -333,10 +343,7 @@ var ViewModel = function () {
     }.bind(this));
 
     // clear any wiki text
-    self.showWiki(false);
-
-    // todo: close any open infoWindow
-    console.log('final self.largeInfowindow.marker' + self.largeInfowindow.marker);
+    //self.showWiki(false);
   };
 
   // This function takes in a COLOR, and then creates a new marker
