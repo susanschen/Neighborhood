@@ -3,7 +3,6 @@
 /**
  * TODO:
  * - get wiki when user clicks on marker
- * - Open matching infowindow when location from the list is selected
  * - close any infowindow when user clicks on drop-down
  * - Make page responsive/pretty
  */
@@ -92,10 +91,12 @@ var ViewModel = function () {
    * Wiki API
    * Calls wikipedia and get the snippet
    * Set Timeout as error handler and clear timeout if AJAX is done
+   * REQUIRED: NEEDS CURRENTATTRACTION TO BE DEFINED
    */
   this.wiki = function () {
     // Set the visibility for the wiki section to true
     self.showWiki(true);
+    console.log("current: " + self.currentAttraction());
 
     // Display error message after 5 seconds
     // (using timeout since JSONP has no error handle functions.)
@@ -106,7 +107,7 @@ var ViewModel = function () {
     // Retreive Wikiepedia info,
     // on successful rertreival display the first article and clear timeout
     var wikiAPI = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" +
-    this.currentAttraction().title() + "&format=json";
+    self.currentAttraction().title() + "&format=json";
 //    console.log('wikiAPI: ' + wikiAPI);
     $.ajax(wikiAPI, {
       dataType: "jsonp"
@@ -129,6 +130,7 @@ var ViewModel = function () {
 
   this.map = null;
   this.markers = [];
+  this.largeInfowindow = null;
 
   this.initMap = function () {
     // Map style credit: https://snazzymaps.com/style/42/apple-maps-esque
@@ -188,25 +190,29 @@ var ViewModel = function () {
       mapTypeControl: false
     });
 
+    // Create one infowindow only, per Google API
+    self.largeInfowindow = new google.maps.InfoWindow();
+
     this.createMarkers();
     this.showMarkers();
   }; // ends initMap
 
   // Populates the infowindow when the marker is clicked
   this.createInfoWindow = function (marker) {
-    var largeInfowindow = new google.maps.InfoWindow();
+    // clear any open infowindow
+    self.largeInfowindow.marker = null;
 
     // Check to make sure the infowindow is not already opened on this marker.
-    if (largeInfowindow.marker !== marker) {
-      largeInfowindow.marker = marker;
+    if (self.largeInfowindow.marker !== marker) {
+      self.largeInfowindow.marker = marker;
       var content = '<div class = "infoWindow">' +
         '<h3 class = "infoHeader">' + marker.title + '</h3>' +
         '</div>';
-      largeInfowindow.setContent(content);
-      largeInfowindow.open(this.map, marker);
+      self.largeInfowindow.setContent(content);
+      self.largeInfowindow.open(this.map, marker);
       // Make sure the marker property is cleared if the infowindow is closed.
-      largeInfowindow.addListener('closeclick', function () {
-        largeInfowindow.marker = null;
+      self.largeInfowindow.addListener('closeclick', function () {
+        self.largeInfowindow.marker = null;
       });
     }
   };
@@ -216,9 +222,6 @@ var ViewModel = function () {
   this.setAttraction = function (clicked) {
     self.currentAttraction(clicked);
     self.wiki();
-    // TODO:
-    // - close any open InfoWindow
-
     // Open matching InfoWindow
     var marker = self.currentAttraction().marker;
     self.createInfoWindow(marker);
@@ -230,9 +233,14 @@ var ViewModel = function () {
     // var highlightedIcon = this.makeMarkerIcon('a2adf2');
 
     // Eventually open infoWindow, passing the current marker as 'this'
-    function callCreateInfoWindow () {
-       self.createInfoWindow(this);
-    }
+    // jslint recommends that function not to be inside a for-loop...
+//    function callCreateInfoWindow () {
+//      self.createInfoWindow(this);
+//       // add the location to current location
+//      self.currentAttraction(self.locations()[i]);
+//      // call wiki
+//      self.wiki();
+//    }
 
     // Create the markers
     for (var i = 0; i < attractionsData.length; i++) {
@@ -253,7 +261,16 @@ var ViewModel = function () {
       // Push the marker to our array of markers.
       this.markers.push(marker);
       // Create an onclick event to open the infowindow at each marker.
-      marker.addListener('click', callCreateInfoWindow);
+
+      // HOW TO PASS 'I' TO ANON FUNCTION????
+      marker.addListener('click', function () {
+        self.createInfoWindow(this);
+         // add the location to currentAttraction, but i is not accessible from anon function
+        self.currentAttraction(self.locations()[i]);
+        console.log('set attracton to locations i: ' + i + ' - ' + self.locations()[i] + self.currentAttraction());
+        // wiki needs currentAttraction to be defined to work!!!
+        self.wiki();
+      });
     }//ends for loop
   };
 
