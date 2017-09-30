@@ -1,12 +1,6 @@
 /* global ko, document, google */
 
 /**
- * TODO:
- * - Make marker bounce on select
- * - Make page responsive/pretty
- */
-
-/**
  * The array for the Attraction Model to hold location details
  */
 
@@ -34,18 +28,13 @@ var Attraction = function (data) {
  */
 
 var ViewModel = function () {
-  // http://knockoutjs.com/documentation/computedObservables.html#managing-this
   var self = this;
 
   // The Menu
   this.showMenu = ko.observable(true);
   this.toggleMenu = function () {
     this.showMenu(!this.showMenu());
-    // console.log('menu: ' + this.showMenu());
   }.bind(this);
-
-  // Hold true of false to show wiki section
-  //this.showWiki = ko.observable(false);
 
   // Get the list of attractions
   this.locations = ko.observableArray([]);
@@ -55,18 +44,6 @@ var ViewModel = function () {
 
   // Let user choose one place to display
   this.currentAttraction = ko.observable();
-
-//  this.getCurrentMarker = function () {
-//    var marker;
-//    var activeTitle = this.currentAttraction().title();
-//    for (var i = 0; i < this.markers.length; i++) {
-//      if (this.markers[i].title === activeTitle) {
-//        marker = this.markers[i];
-//        // console.log('match found' + marker);
-//      }
-//    }
-//    return marker;
-//  };
 
   // Filter the lists based on category
   this.filterOptions = ['All', 'Parks', 'Buildings'];
@@ -78,7 +55,6 @@ var ViewModel = function () {
   // Start the filteredList with the locations array
   this.defaultList = function () {
     this.locations().forEach(function (location) {
-      // console.log(location);
       self.filteredList().push(location);
     });
   };
@@ -92,10 +68,6 @@ var ViewModel = function () {
    * REQUIRED: NEEDS CURRENTATTRACTION TO BE DEFINED
    */
   this.wiki = function () {
-    // Set the visibility for the wiki section to true
-    //self.showWiki(true);
-    console.log("current: " + self.currentAttraction());
-
     // Display error message after 5 seconds
     // (using timeout since JSONP has no error handle functions.)
     var wikiTimeout = setTimeout(function() {
@@ -111,7 +83,9 @@ var ViewModel = function () {
     $.ajax(wikiAPI, {
       dataType: "jsonp"
       }).done(function (response) {
-//        console.log('WIKI RESPONSE: ' + response);
+        // clear error handler
+        clearTimeout(wikiTimeout);
+
         var articleList = response[1];
         var snippetList = response[2];
         // Display just the first article
@@ -119,13 +93,8 @@ var ViewModel = function () {
         var snippet = snippetList[0];
         self.currentAttraction().wikiUrl('http://en.wikipedia.org/wiki/' + article);
         self.currentAttraction().wikiText(snippet);
-
-      console.log ('INSIDE WIKI: wikiUrl: ' + self.currentAttraction().wikiUrl() + ' wikiText: ' + self.currentAttraction().wikiText());
-        clearTimeout(wikiTimeout);
-
         // Open infoWindow when wiki is succussful
         self.createInfoWindow(self.currentAttraction().marker);
-        console.log('called infowindow');
       }); // ends done()
   };
 
@@ -220,7 +189,6 @@ var ViewModel = function () {
         '<p class = "wikiText">' + wikiText + '</p>' +
         '<p class = "wikiUrl"> Source: ' + wikiUrl + '</p>' +
         '</div>';
-      console.log ('INSIDE INFOWIN: wikiUrl: ' + wikiUrl + ' wikiText: ' + wikiText + 'content: ' + content);
       self.largeInfowindow.setContent(content);
       self.largeInfowindow.open(this.map, marker);
       // Listen for closeclick on the infowindow
@@ -232,31 +200,21 @@ var ViewModel = function () {
   };
 
   // Sets the current Attraction based on user click,
-  // and open matching infoWindow & Wiki article
+  // and call Wiki (which is async)
   this.setAttraction = function (clicked) {
     self.stopBounce();
     self.currentAttraction(clicked);
     // Bounce matching marker
     var marker = self.currentAttraction().marker;
     marker.setAnimation(google.maps.Animation.BOUNCE);
-    // get wiki info (ASYNC)
+    // get wiki info
     self.wiki();
   };
 
   this.createMarkers = function () {
     // Style the markers
     var defaultIcon = this.makeMarkerIcon('f2c6a2');
-    // var highlightedIcon = this.makeMarkerIcon('a2adf2');
 
-    // Eventually open infoWindow, passing the current marker as 'this'
-    // jslint recommends that function not to be inside a for-loop...
-//    function callCreateInfoWindow () {
-//      self.createInfoWindow(this);
-//       // add the location to current location
-//      self.currentAttraction(self.locations()[i]);
-//      // call wiki
-//      self.wiki();
-//    }
     // Create the markers
     for (var i = 0; i < attractionsData.length; i++) {
       // Get the position from the location array.
@@ -281,10 +239,7 @@ var ViewModel = function () {
         self.stopBounce();
         this.setAnimation(google.maps.Animation.BOUNCE);
         self.currentAttraction(self.locations()[this.id]);
-        console.log('set attracton to this id: ' + this.id + ' - ' + self.locations()[this.id] + self.currentAttraction());
         self.wiki();
-//        self.createInfoWindow(this);
-//        console.log('called infowindow');
       });
     }//ends for loop
   };
@@ -315,9 +270,8 @@ var ViewModel = function () {
   };
 
   // When a user clicks on the drop-down:
-  // Create a new list and markers based on the user choice
-  // Hide wiki section
-  // Close infowindow
+  // - Clear old filter list, hide all markers,  and close any infowindow
+  // - Create a new list and markers based on the user choice
   this.update = function () {
     // clear old list and markers
     this.locations().forEach(function (location) {
@@ -329,8 +283,6 @@ var ViewModel = function () {
 
     // create new list and markers
     this.locations().forEach(function (location) {
-      // console.log(location);
-      // console.log(location.marker);
       if(this.selectedOption() === 'All') {
         this.filteredList.push(location);
         location.marker.setMap(self.map);
@@ -342,9 +294,6 @@ var ViewModel = function () {
         location.marker.setMap(self.map);
       }
     }.bind(this));
-
-    // clear any wiki text
-    //self.showWiki(false);
   };
 
   // This function takes in a COLOR, and then creates a new marker
