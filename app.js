@@ -214,6 +214,13 @@ var ViewModel = function () {
     // Style the markers
     var defaultIcon = this.makeMarkerIcon('f2c6a2');
 
+    function markerClick () {
+      self.stopBounce();
+      this.setAnimation(google.maps.Animation.BOUNCE);
+      self.currentAttraction(self.locations()[this.id]);
+      self.wiki();
+    }
+
     // Create the markers
     for (var i = 0; i < attractionsData.length; i++) {
       // Get the position from the location array.
@@ -234,12 +241,7 @@ var ViewModel = function () {
       this.markers.push(marker);
 
       // Create an onclick event to open the infowindow at each marker.
-      marker.addListener('click', function () {
-        self.stopBounce();
-        this.setAnimation(google.maps.Animation.BOUNCE);
-        self.currentAttraction(self.locations()[this.id]);
-        self.wiki();
-      });
+      marker.addListener('click', markerClick);
     }//ends for loop
   };
 
