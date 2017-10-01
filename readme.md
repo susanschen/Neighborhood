@@ -1,6 +1,6 @@
 ## Google Map, Wikipedia and Knockout Project
 
-This project is a combination of three courses from Udacity's front-end developer course: Google Map API, Intro to AJAX using Wikipeia API, and Using an Organization Library with Knockout.js.
+This project is a combination of three courses from Udacity's front-end developer course: Google Map API, Intro to AJAX using Wikipedia API, and Using an Organization Library with Knockout.js.
 
 ### To run the app
 You may download the repo, use your own Google Map API key, and open index.html, or view it online [here](https://susanschen.github.io/Neighborhood/).
