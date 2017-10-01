@@ -249,7 +249,9 @@ var ViewModel = function () {
       this.markers[i].setMap(this.map);
       bounds.extend(this.markers[i].position);
     }
-    this.map.fitBounds(bounds);
+    google.maps.event.addDomListener(window, 'resize', function() {
+      self.map.fitBounds(bounds);
+    });
 
   };
 
