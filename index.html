@@ -2,46 +2,40 @@
 <html>
   <head>
   <title>Susan's Map Project</title>
-  <meta charset = "UTF-8">
-  <meta name = "description" content = "A map of my neighborhood">
-  <meta name = "keywords" content = "Google Map">
-  <meta name = "author" content = "
-Susan Chen">
-  <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
-  <link rel = "stylesheet" href = "main.css">
+  <meta charset="UTF-8">
+  <meta name="description" content="A map of my neighborhood">
+  <meta name="keywords" content="Google Map">
+  <meta name="author" content="Susan Chen">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="main.css">
   </head>
   <body>
-    <div class = "container">
-
-      <div id = "panel" class = "sidenav" data-bind ="visible: showMenu">
-        <span class = "closebtn" data-bind = "click: toggleMenu">X </span>
+    <div class="container">
+      <div id="panel" class="sidenav" data-bind="visible: showMenu">
+        <span class="closebtn" data-bind="click: toggleMenu">X </span>
         <h1>Popular Attractions</h1>
         <div>
           <p> View
           <select id="filter" data-bind="options: filterOptions, value: selectedOption, click: update"></select></p>
-
-          <ul id = "place-list" data-bind = "foreach: filteredList" >
-            <li data-bind = "text: title, click: $parent.setAttraction"></li>
+          <ul id="place-list" data-bind="foreach: filteredList" >
+            <li data-bind="text: title, click: $parent.setAttraction"></li>
           </ul>
         </div>
       </div>
-
-      <div class = "openbtn" data-bind = "click: toggleMenu">Menu</div>
-
-      <div id = "map"></div>
+      <div class="openbtn" data-bind="click: toggleMenu">Menu</div>
+      <div id="map"></div>
     </div>
 
     <script
-      src = "https://code.jquery.com/jquery-2.2.4.min.js"
-      integrity = "sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-      crossorigin = "anonymous"></script>
-    <script src = "knockout-3.2.0.js"></script>
-    <script src = "data.js"></script>
-    <script src = "app.js"></script>
+      src="https://code.jquery.com/jquery-2.2.4.min.js"
+      integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+      crossorigin="anonymous"></script>
+    <script src="knockout-3.2.0.js"></script>
+    <script src="data.js"></script>
+    <script src="app.js"></script>
     <script async
-      src =
-      "https://maps.googleapis.com/maps/api/js?key=AIzaSyA5vq86h6-sQUBfJhZP-iLTHKhKoJ3H5G8&v=3&callback=viewModel.initMap"
-      onerror = "viewModel.mapError()">
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5vq86h6-sQUBfJhZP-iLTHKhKoJ3H5G8&v=3&callback=viewModel.initMap"
+      onerror="viewModel.mapError()">
     </script>
   </body>
 </html>
