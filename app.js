@@ -65,36 +65,37 @@ var ViewModel = function () {
    * Wiki API
    * Calls wikipedia and get the snippet
    * Set Timeout as error handler and clear timeout if AJAX is done
-   * REQUIRED: NEEDS CURRENTATTRACTION TO BE DEFINED
    */
   this.wiki = function () {
-    // Display error message after 5 seconds
-    // (using timeout since JSONP has no error handle functions.)
-    var wikiTimeout = setTimeout(function() {
-      self.currentAttraction().wikiText('Failed to load Wikipedia resources');
-      self.currentAttraction().wikiUrl('Unavailable');
-    }, 5000);
+    if(self.currentAttraction() !== undefined || self.currentAttraction() !== null){
+      // Display error message after 5 seconds
+      // (using timeout since JSONP has no error handle functions.)
+      var wikiTimeout = setTimeout(function() {
+        self.currentAttraction().wikiText('Failed to load Wikipedia resources');
+        self.currentAttraction().wikiUrl('Unavailable');
+      }, 5000);
 
-    // Retreive Wikiepedia info,
-    // on successful rertreival display the first article and clear timeout
-    var wikiAPI = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" +
-    self.currentAttraction().title() + "&format=json";
-    $.ajax(wikiAPI, {
-      dataType: "jsonp"
-      }).done(function (response) {
-        // clear error handler
-        clearTimeout(wikiTimeout);
+      // Retreive Wikiepedia info,
+      // on successful rertreival display the first article and clear timeout
+      var wikiAPI = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" +
+      self.currentAttraction().title() + "&format=json";
+      $.ajax(wikiAPI, {
+        dataType: "jsonp"
+        }).done(function (response) {
+          // clear error handler
+          clearTimeout(wikiTimeout);
 
-        var articleList = response[1];
-        var snippetList = response[2];
-        // Display just the first article
-        var article = articleList[0];
-        var snippet = snippetList[0];
-        self.currentAttraction().wikiUrl('http://en.wikipedia.org/wiki/' + article);
-        self.currentAttraction().wikiText(snippet);
-        // Open infoWindow when wiki is succussful
-        self.createInfoWindow(self.currentAttraction().marker);
-      }); // ends done()
+          var articleList = response[1];
+          var snippetList = response[2];
+          // Display just the first article
+          var article = articleList[0];
+          var snippet = snippetList[0];
+          self.currentAttraction().wikiUrl('http://en.wikipedia.org/wiki/' + article);
+          self.currentAttraction().wikiText(snippet);
+          // Open infoWindow when wiki is succussful
+          self.createInfoWindow(self.currentAttraction().marker);
+        }); // ends done()
+    }
   };
 
   /**
