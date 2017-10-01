@@ -3,7 +3,7 @@
 This project is a combination of three courses from Udacity's front-end developer course: Google API, Intro to AJAX, and Using an Organization Library, which is Knockout.js.
 
 ### To run the app
-You may download the repo, use your own Google Map API key, and open index.html, or view it online here.
+You may download the repo, use your own Google Map API key, and open index.html, or view it online [here](https://susanschen.github.io/Neighborhood/).
 
 ### My thoughts on this project
 
