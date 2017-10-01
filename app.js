@@ -279,8 +279,6 @@ var ViewModel = function () {
       this.filteredList.pop(location);
     }.bind(this));
     this.hideMarkers();
-    // close any open infowindow
-    self.largeInfowindow.close();
 
     // create new list and markers
     this.locations().forEach(function (location) {
@@ -295,6 +293,9 @@ var ViewModel = function () {
         location.marker.setMap(self.map);
       }
     }.bind(this));
+
+    // close any open infowindow
+    this.largeInfowindow.close();
   };
 
   // This function takes in a COLOR, and then creates a new marker
