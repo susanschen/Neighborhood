@@ -65,8 +65,9 @@ h1 {
   transition: 0.3s;
 }
 
-.sidenav a:hover {
-  color: #f1f1f1;
+.sidenav li:hover {
+  color: #a2daf2;
+  cursor: pointer;
 }
 
 .sidenav .closebtn {
